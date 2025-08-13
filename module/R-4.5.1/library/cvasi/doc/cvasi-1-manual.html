@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="N. Kehrein" />
+
+
+<title>User Manual</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">User Manual</h1>
+<h4 class="author">N. Kehrein</h4>
+<h4 class="date">24 October, 2024</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#required-skills" id="toc-required-skills">Required
+skills</a></li>
+<li><a href="#how-to-install" id="toc-how-to-install">How to
+install</a></li>
+<li><a href="#modeling-and-assessment-workflow" id="toc-modeling-and-assessment-workflow">Modeling and assessment
+workflow</a>
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#setting-up-a-scenario" id="toc-setting-up-a-scenario">Setting up a scenario</a></li>
+<li><a href="#running-a-simulation" id="toc-running-a-simulation">Running a simulation</a></li>
+<li><a href="#deriving-assessment-endpoints" id="toc-deriving-assessment-endpoints">Deriving assessment
+endpoints</a></li>
+</ul></li>
+<li><a href="#data-format-of-model-inputs" id="toc-data-format-of-model-inputs">Data format of model
+inputs</a></li>
+<li><a href="#how-to-derive-model-inputs" id="toc-how-to-derive-model-inputs">How to derive model inputs</a></li>
+<li><a href="#description-of-model-outputs" id="toc-description-of-model-outputs">Description of model outputs</a>
+<ul>
+<li><a href="#simulation-results" id="toc-simulation-results">Simulation
+results</a></li>
+<li><a href="#effect-levels" id="toc-effect-levels">Effect
+levels</a></li>
+<li><a href="#effect-profiles" id="toc-effect-profiles">Effect
+profiles</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul>
+</div>
+
+<p>The <em>cvasi</em> package is a software library that extends the
+features of the programming language <a href="https://www.r-project.org/"><em>R</em></a> by routines for ecotox
+effect modeling. The routines are intended to be used for scientific
+purposes as well as in the context of regulatory risk assessments.
+<em>cvasi</em> implements model equations and default parameters to
+simulate a set of toxicokinetic-toxicodynamic (TKTD) models. The models
+are intended to assess the effects of substance exposure on effect
+endpoints, such as growth and reproduction, for a range of standard test
+species.</p>
+<p>The package offers a standardized framework which can be extended by
+(almost) any TKTD model that can be implemented in <em>R</em>. Its
+modeling workflows are designed to be self-explanatory and as intuitive
+as possible to make modeling approaches more accessible. In addition,
+the framework’s routines are optimized to reduce the computing time
+required for extensive risk assessments.</p>
+<div id="required-skills" class="section level1">
+<h1>Required skills</h1>
+<p>The <em>cvasi</em> package and its routines can be used by anyone
+with basic to intermediate knowledge of the <em>R</em> programming
+language. The routines can be used in a procedural fashion, commonly
+referred to as <em>base R</em>, in which function statements are
+executed, assigned to a variable, and then passed on to the next
+function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(cvasi)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">## Sample base R workflow ##</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Create a scenario object of model GUTS-RED-IT</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>my_it <span class="ot">&lt;-</span> <span class="fu">GUTS_RED_IT</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co"># Set model parameters</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>my_it <span class="ot">&lt;-</span> <span class="fu">set_param</span>(my_it, <span class="fu">c</span>(<span class="at">kd=</span><span class="fl">1.2</span>, <span class="at">hb=</span><span class="dv">0</span>, <span class="at">alpha=</span><span class="fl">9.2</span>, <span class="at">beta=</span><span class="fl">4.3</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co"># Print scenario details</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>my_it</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt; &#39;GUTS-RED-IT&#39; scenario</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt; param: kd=1.2, hb=0, alpha=9.2, beta=4.3</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt; init : D=0, H=0</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt; endpt: L</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; times: none</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt; expsr:</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt; &gt;&gt; exposure series is empty</span></span></code></pre></div>
+<p>A more advanced approach is to use the <em>tidyr</em> syntax
+(cf. Wickham &amp; Grolemund 2017) which uses verb-like statements to
+modify data. <em>tidyr</em> syntax can be used to chain functions calls
+which pass the result of one function on to the next:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## Example &#39;tidyr&#39; workflow ##</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># the pipeline (%&gt;%) symbol passes results to the next statement</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">GUTS_RED_IT</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">set_param</span>(<span class="fu">c</span>(<span class="at">kd=</span><span class="fl">1.2</span>, <span class="at">hb=</span><span class="dv">0</span>, <span class="at">alpha=</span><span class="fl">9.2</span>, <span class="at">beta=</span><span class="fl">4.3</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; &#39;GUTS-RED-IT&#39; scenario</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; param: kd=1.2, hb=0, alpha=9.2, beta=4.3</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; init : D=0, H=0</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; endpt: L</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; times: none</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; expsr:</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; &gt;&gt; exposure series is empty</span></span></code></pre></div>
+<p>Both workflow styles achieve the same result, but <em>tidyr</em> is
+terser, especially if several operations are performed on the same
+object. <em>tidyr</em> style is the recommended way to interact with the
+<em>cvasi</em> package.</p>
+</div>
+<div id="how-to-install" class="section level1">
+<h1>How to install</h1>
+<p>The simplest way to install the <em>cvasi</em> package is by
+downloading it from <em>CRAN</em>:</p>
+<p>The latest development version can be installed from GitHub:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>, <span class="at">dependencies=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;cvasi-tktd/cvasi&quot;</span>, <span class="at">dependencies=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The package and its source code is also available on <a href="https://github.com/cvasi-tktd/cvasi/">GitHub</a>.</p>
+</div>
+<div id="modeling-and-assessment-workflow" class="section level1">
+<h1>Modeling and assessment workflow</h1>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The central concept within the <em>cvasi</em> package is the
+<em>scenario</em>. It encapsulates all key properties to run a
+simulation such as initial state and model parameters. The scenario can
+be thought of as the collection of data and parameters necessary to
+reproduce a certain study condition or situation. The set of available
+scenario properties depends on the model type but may include:</p>
+<ul>
+<li>Initial state,</li>
+<li>Model parameters,</li>
+<li>Assessment parameters,</li>
+<li>Exposure time-series, and</li>
+<li>Environmental factor time-series</li>
+</ul>
+<p>Scenario properties can be modified using intuitively named
+<em>tidyr</em> verbs: in general, each verb accepts a scenario as an
+argument and returns a modified scenario as the result. For instance,
+the <code>set_param()</code> function will update a scenario’s
+parameters to new values:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(cvasi)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># Create a new GUTS-RED-IT scenario and set its model parameters</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">GUTS_RED_IT</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">set_param</span>(<span class="fu">c</span>(<span class="at">kd=</span><span class="fl">1.2</span>, <span class="at">hb=</span><span class="dv">0</span>, <span class="at">alpha=</span><span class="fl">9.2</span>, <span class="at">beta=</span><span class="fl">4.3</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; &#39;GUTS-RED-IT&#39; scenario</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; param: kd=1.2, hb=0, alpha=9.2, beta=4.3</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; init : D=0, H=0</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; endpt: L</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; times: none</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; expsr:</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; &gt;&gt; exposure series is empty</span></span></code></pre></div>
+<p>If a scenario is properly defined, it can be passed to dedicated
+functions that, for instance, run a simulation or derive assessment
+endpoints. These higher-level functions do not return a scenario object
+but a table of e.g. simulation results for that particular scenario. As
+an example, simulating the sample scenario <code>minnow_it</code> will
+run a <em>GUTS-RED-IT</em> model using substance-specific
+parameters:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Example GUTS-RED-IT scenario derived from an acute fish toxicity study</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># of the fathead minnow and Chlorpyrifos (Geiger et al. 1988)</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>minnow_it <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">simulate</span>()</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;   time         D      H         S</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; 1    0 0.0000000 0.0000 1.0000000</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; 2    1 0.7075891 0.0017 0.9982869</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; 3    2 0.9144958 0.0034 0.9965618</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; 4    3 0.9749972 0.0051 0.9948550</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; 5    4 0.9926889 0.0068 0.9931605</span></span></code></pre></div>
+<p>The table returned by <code>simulate()</code> contains the value of
+each state variable at the requested output time points. In case of the
+<em>GUTS-RED-IT</em> model, this comprises the state variables
+<code>D</code> (scaled damage) and <code>H</code> (cumulative hazard).
+Effect levels, effect profiles, and dose-response graphs can be derived
+in a similar manner. Please refer to EFSA PPR Panel (2018) or the
+package help for more information on <em>GUTS-RED</em> type models:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Access the package help on GUTS-RED type models</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>?<span class="st">&quot;GUTS-RED-models&quot;</span></span></code></pre></div>
+</div>
+<div id="setting-up-a-scenario" class="section level2">
+<h2>Setting up a scenario</h2>
+<p>A scenario is created by first calling a constructor function that is
+dedicated to a particular model. The <em>cvasi</em> package supports
+multiple TKTD models, for instance:</p>
+<ul>
+<li>Reduced General Unified Threshold models of Survival
+(<em>GUTS-RED</em>)
+<ul>
+<li><code>GUTS_RED_SD()</code></li>
+<li><code>GUTS_RED_IT()</code></li>
+</ul></li>
+<li>Macrophyte models
+<ul>
+<li><code>Lemna_Schmitt()</code>, published by Schmitt <em>et al.</em>
+(2013)</li>
+<li><code>Lemna_SETAC()</code>, published by Klein <em>et al.</em>
+(2021)</li>
+<li><code>Myrio()</code>, an adaption of Klein <em>et al.</em> (2021) to
+<em>Myriophyllum</em> at Tier 2C</li>
+</ul></li>
+<li>Algae models
+<ul>
+<li><code>Algae_Weber()</code>, published by Weber <em>et al.</em>
+(2012)</li>
+<li><code>Algae_TKTD()</code>, based on Weber <em>et al.</em> (2012),
+but with scaled damage</li>
+<li><code>Algae_Simple()</code>, simplified growth model without
+external forcing variables</li>
+</ul></li>
+<li>Dynamic Energy Budget (<em>DEB</em>) models
+<ul>
+<li><code>DEB_abj()</code>, the <em>abj</em> model with type M
+acceleration</li>
+<li><code>DEBtox()</code>, as implemented in the <em>DEBtox2019</em>
+module of <a href="https://www.debtox.info/byom.html"><em>BYOM</em></a></li>
+</ul></li>
+</ul>
+<p>The listed functions create objects that will carry all data and
+settings to fully describe a scenario. In case of a <em>GUTS-RED-IT</em>
+scenario, one needs to provide at least the four model parameters and an
+exposure time-series to fully define a scenario:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Define an exposure time-series</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>myexposure <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">1.01</span>, <span class="dv">5</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                         <span class="at">conc=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># Create and parameterize a scenario</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">GUTS_RED_IT</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">set_param</span>(<span class="fu">c</span>(<span class="at">kd=</span><span class="fl">1.2</span>, <span class="at">hb=</span><span class="dv">0</span>, <span class="at">alpha=</span><span class="fl">9.2</span>, <span class="at">beta=</span><span class="fl">4.3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">set_exposure</span>(myexposure) <span class="ot">-&gt;</span> myscenario</span></code></pre></div>
+<p>One can examine the main scenario properties by passing the scenario
+to the console like in the next example. The console will print the
+model name, model parameters (<em>param</em>), initial state
+(<em>init</em>), enabled effect endpoints (<em>endpt</em>), output times
+(<em>times</em>), environmental forcings (<em>forcs</em>), and exposure
+series (<em>expsr</em>). Depending on model type, the scenario may carry
+additional properties that are not necessarily displayed in the console
+output.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Print information about the scenario</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>myscenario</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; &#39;GUTS-RED-IT&#39; scenario</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; param: kd=1.2, hb=0, alpha=9.2, beta=4.3</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; init : D=0, H=0</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; endpt: L</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; times: [0,5] n=4, regular</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; expsr:</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt;   time conc</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 1 0.00   10</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; 2 1.00   10</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; 3 1.01    0</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; 4 5.00    0</span></span></code></pre></div>
+<p>Several <code>set_*()</code> verbs are available to modify scenario
+properties, such as:</p>
+<ul>
+<li><code>set_tag()</code>, to assign a custom tag to identify the
+scenario</li>
+<li><code>set_init()</code>, to set the initial state</li>
+<li><code>set_param()</code>, to modify model parameters</li>
+<li><code>set_times()</code>, to define output time points</li>
+<li><code>set_forcings()</code>, to set environmental factors
+(i.e. <em>forcings</em>)</li>
+<li><code>set_exposure()</code>, to set an exposure time-series</li>
+<li><code>set_endpoints()</code>, to enable/disable assessment
+endpoints</li>
+<li><code>set_transfer()</code>, to define transfer intervals of
+<em>Lemna</em> fronds</li>
+<li><code>set_moa()</code>, to select a model’s mode of action</li>
+<li><code>set_window()</code>, to control moving exposure windows</li>
+</ul>
+<p>Please note that <code>set_exposure()</code> will, by default, use
+the exposure series’ time points also as output time points. If this
+behavior is undesired, it can be disabled by setting the argument
+<code>reset_times=FALSE</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Update the exposure time-series but keep former output time points</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>myscenario <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">set_noexposure</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; &#39;GUTS-RED-IT&#39; scenario</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; param: kd=1.2, hb=0, alpha=9.2, beta=4.3</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; init : D=0, H=0</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; endpt: L</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; times: [0,5] n=4, regular</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; expsr: no exposure</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt;   time conc</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; 1    0    0</span></span></code></pre></div>
+<p>Note that <code>times</code> still has the original four elements
+although the assigned exposure series has only a single entry. Output
+time points can be explicitly set with <code>set_times()</code>. For
+deriving effect endpoints, the simulated time frame can be split up into
+moving exposure windows of a certain length using
+<code>set_window()</code>. A more complex scenario setup may look like
+the following workflow:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Selected model parameters</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>myparam <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">p_M=</span><span class="dv">3211</span>, <span class="at">v=</span><span class="fl">0.023</span>, <span class="at">k_J=</span><span class="fl">0.63</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co"># Initial body length L</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>myinit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">L=</span><span class="fl">0.02</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co"># Constant non-zero exposure</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>myexposure <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time=</span><span class="dv">0</span>, <span class="at">conc=</span><span class="fl">1.72</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">DEB_abj</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">set_param</span>(myparam) <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">set_init</span>(myinit) <span class="sc">%&gt;%</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  <span class="fu">set_exposure</span>(myexposure, <span class="at">reset_times=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%&gt;%</span>              <span class="co"># Output times 0,1,2,...,10</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="fu">set_mode_of_action</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span>        <span class="co"># Method of Action #4 to be activated</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  <span class="fu">set_window</span>(<span class="at">length=</span><span class="dv">3</span>, <span class="at">interval=</span><span class="dv">1</span>) <span class="co"># Using moving exposure windows of length 3 days</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; &#39;DEB_abj&#39; scenario</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; param: p_M=3211, v=0.023, k_J=0.63, MoA=4</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; init : L=0.02, E=0, H=0, R=0, cV=0, Lmax=0</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; endpt: L, R</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; times: [0,10] n=11, regular</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; expsr:</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt;   time conc</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; 1    0 1.72</span></span></code></pre></div>
+</div>
+<div id="running-a-simulation" class="section level2">
+<h2>Running a simulation</h2>
+<p>After a scenario is fully set up, it can be passed to
+<code>simulate()</code> to return model results:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Example scenario of the Lemna TKTD model</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">simulate</span>()</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt;   time       BM E    M_int     C_int  FrondNo</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; 1    0 50.00000 1   0.0000 0.0000000 500000.0</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; 2    1 52.15860 1 223.0746 0.2560990 521586.0</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; 3    2 52.43488 1 369.6343 0.4221196 524348.8</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; 4    3 52.33910 1 463.0257 0.5297395 523391.0</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; 5    4 52.17916 1 521.8922 0.5989178 521791.6</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; 6    5 52.00010 1 558.6262 0.6432809 520001.0</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt; 7    6 51.81396 1 581.2167 0.6716992 518139.6</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; 8    7 51.63733 1 474.0708 0.5497470 516373.3</span></span></code></pre></div>
+<p><code>simulate()</code> returns the model state for each output time
+point. In this example, it returns results for the period from zero to
+seven with an equi-distant time step length of one. The temporal
+resolution of results can be increased by specifying additional output
+times:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Same simulation period, but with a smaller step length of 0.1</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">7</span>, <span class="fl">0.1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">simulate</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="fu">tail</span>()</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;    time       BM E    M_int     C_int  FrondNo</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; 66  6.5 51.72105 1 556.4461 0.6442276 517210.5</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 67  6.6 51.70312 1 544.1607 0.6302225 517031.2</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; 68  6.7 51.68563 1 529.6839 0.6136637 516856.3</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; 69  6.8 51.66871 1 513.1144 0.5946620 516687.1</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; 70  6.9 51.65253 1 494.5465 0.5733227 516525.3</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; 71  7.0 51.63733 1 474.0708 0.5497470 516373.3</span></span></code></pre></div>
+<p>The resulting table now contains ten times as many rows because we
+decreased the step length by a factor of ten but simulated the same
+period. The temporal resolution of simulations can have an influence on
+results, i.e. the numerical values of the returned variables. These
+differences usually originate from small numerical errors introduced by
+the solver of the model’s Ordinary Differential Equations. Generally,
+parameters such as the step-length in time can have influence on the
+precision of simulation results.</p>
+<p>There are several ways to increase the precision of simulation
+results without modifying a scenario’s output times. One option is to
+decrease the solver’s maximum step length in time by setting the
+optional argument <code>hmax</code>. The smaller <code>hmax</code>, the
+more precise the results:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Original simulation period, but with a maximum solver step length of hmax=0.01</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">simulate</span>(<span class="at">hmax=</span><span class="fl">0.01</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt;   time       BM E    M_int     C_int  FrondNo</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; 1    0 50.00000 1   0.0000 0.0000000 500000.0</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; 2    1 52.15858 1 223.0745 0.2560989 521585.8</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; 3    2 52.43495 1 369.6344 0.4221192 524349.5</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; 4    3 52.33917 1 463.0261 0.5297392 523391.7</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; 5    4 52.17923 1 521.8927 0.5989176 521792.3</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; 6    5 52.00016 1 558.6268 0.6432808 520001.6</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; 7    6 51.81403 1 581.2174 0.6716992 518140.3</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; 8    7 51.63740 1 474.0725 0.5497483 516374.0</span></span></code></pre></div>
+<p>Although very effective, reducing <code>hmax</code> to small values
+may lead to inefficiently long runtimes of simulations. If numerical
+precision is an issue, it is advisable to also test other solver
+settings such as absolute and relative error tolerances
+(<code>atol</code> and <code>rtol</code>) or to switch to another solver
+method. Numerical precision and stability is a complex and advanced
+topic, please refer to the manual of <code>simulate()</code> for
+additional information:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>?cvasi<span class="sc">::</span>simulate</span></code></pre></div>
+</div>
+<div id="deriving-assessment-endpoints" class="section level2">
+<h2>Deriving assessment endpoints</h2>
+<p>Simulation results are the basis for deriving assessment endpoints
+such as effect levels and effect profiles. The <em>cvasi</em> package
+implements routines to derive these endpoints efficiently independent of
+the actual model that is being assessed. Hence, if a model is available
+within the package framework, it can be used to derive assessment
+endpoints. As an example, the following statement derives effect levels
+for a sample <em>GUTS-RED-IT</em> scenario:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># GUTS-RED-IT scenario of the fathead minnow and chlorpyrifos</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>minnow_it <span class="sc">%&gt;%</span> <span class="fu">effect</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt;   scenario           L L.dat.start L.dat.end</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;         &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; 1 &lt;GutsRdIt&gt; 0.0000630           0         4</span></span></code></pre></div>
+<p>The lethality endpoint <code>L</code> has a value of
+<code>6.3e-5</code> which means that lethality has only marginally
+increased by 0.0063% compared to a control scenario without exposure to
+the contaminant. The columns <code>L.dat.start</code> and
+<code>L.dat.end</code> denote the period for which the effect level was
+observed. In case of <em>GUTS-RED</em> models, this usually refers to
+the whole simulation period. For certain assessments it may be necessary
+to evaluate all exposure periods of a certain length within the original
+series separately. This approach is referred to as a <em>moving exposure
+window</em>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Setting up a custom scenario with a total simulation period of 14 days and</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co"># an exposure window length of 7 to assess a trapezoidal exposure pattern</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>americamysis <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">set_window</span>(<span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">set_exposure</span>(<span class="fu">data.frame</span>(<span class="at">t=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>), <span class="at">c=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">0</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">14</span>) <span class="ot">-&gt;</span> mydeb</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co"># Derive maximum effect level of all exposure windows</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>mydeb <span class="sc">%&gt;%</span> <span class="fu">effect</span>()</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 7</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt;   scenario      L L.dat.start L.dat.end     R R.dat.start R.dat.end</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;    &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt; 1 &lt;DebAbj&gt; 0.0521           2         9     0           0         7</span></span></code></pre></div>
+<p>The <code>americamysis</code> scenario provides two effect endpoints:
+structural length (<code>L</code>) and reproduction (<code>R</code>).
+Exposure to the simulated toxicant results at maximum in a 5.21%
+decrease in body length compared to control scenarios. The maximum
+effect was observed in the exposure window starting at time
+<code>2.0</code> and ending at <code>9.0</code>, cf. columns
+<code>L.dat.start</code> and <code>L.dat.end</code>. The toxicant had no
+effect on reproduction due to the simulation being too short for
+reproduction to occur.</p>
+<p>Scenarios can also be assessed regarding to so-called effect
+profiles, or <em>EPx</em> values for short. An <em>EPx</em> value
+quantifies the multiplication factor that is necessary to produce an
+effect level of x% for that particular scenario. As an example, an
+<em>EP50</em> of <code>17.0</code> would mean that the scenario’s
+exposure series needs to be multiplied by a factor of 17 to observe a
+50% effect. The function <code>epx()</code> can derive effect profiles
+efficiently with arbitrary precision:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># Restrict assessed endpoints to structural length (L)</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>mydeb <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">set_endpoints</span>(<span class="st">&quot;L&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="fu">epx</span>()</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt;   scenario L.EP10 L.EP50</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;    &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; 1 &lt;DebAbj&gt;   1.16   1.71</span></span></code></pre></div>
+<p>In this example, a factor of <code>1.16</code> resulted in 10% effect
+on structural length and a factor of <code>1.71</code> in 50% effect.
+<code>epx()</code> provides means to control the precision of derived
+<em>EPx</em> values, the range of tested multiplication factors, factor
+cutoff thresholds, and debugging capabilities. To examine how a
+particular <em>EPx</em> value was derived, simply set the argument
+<code>verbose=TRUE</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># Examine how the EP20 value is derived</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>minnow_it <span class="sc">%&gt;%</span> <span class="fu">epx</span>(<span class="at">level=</span><span class="dv">20</span>, <span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&gt; epx: screening multiplication factors</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&gt;   start: 10</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 1 &lt;&lt;&lt;</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 5.5</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 7.75</span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 6.625</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 7.1875</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 6.90625</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 6.765625</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 6.8359375</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt;   L.EP20: 6.80078125</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt;   scenario   L.EP20</span></span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;      &lt;dbl&gt;</span></span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="co">#&gt; 1 &lt;GutsRdIt&gt;   6.80</span></span></code></pre></div>
+<p>In this example, the algorithm of <code>epx()</code> first tests a
+multiplication factor of <code>10</code> and then continues testing
+additional factors using a binary search algorithm until a factor is
+found that causes 20% effect.</p>
+<p><strong>Please note</strong>: Depending on model and chosen
+parameters, it may be impossible to calculate <em>EPx</em> values (for
+selected effect levels), because the model or organism cannot reach the
+required state. As an example: If the simulated period of a
+<em>DEB_abj</em> scenario is too short, reproduction cannot occur.
+Therefore, effects on reproduction will always be zero independent of
+the exposure level. Consequently, <em>EPx</em> values for the
+reproduction endpoint will not be available.</p>
+</div>
+</div>
+<div id="data-format-of-model-inputs" class="section level1">
+<h1>Data format of model inputs</h1>
+<p>Input data for the <em>cvasi</em> package relies on common <em>R</em>
+data structures and imposes only minimal requirements to set up
+scenarios:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Data representing numerical values should be represented by
+numerical types</strong>. Practically, this means that numerical
+scenario properties such as output time points must not be passed as
+string literals even if the string may be representing a number. Due to
+<em>R</em> being a dynamically typed language, parameter values and
+their types may have to be checked on import by the user.</li>
+<li><strong>Time-series data must be represented by a
+<code>data.frame</code> with exactly two numerical columns</strong>: The
+first column for time, the second for the series’ value. The column
+names are irrelevant but sensible names may help documenting the data.
+Constant values can be represented by time-series with only a single row
+or entry.</li>
+</ol>
+<p>Therefore, it should be possible to apply the package’s routines on
+existing datasets with minimal effort. Please refer to Wickham and
+Grolemund (2017) on how to implement plain and consistent processes to
+import and transform data using <em>tidyr</em> syntax.</p>
+<p><em>cvasi</em> does support loading data from common sources, such as
+the exposure model <em>TOXSWA</em>, to ease data processing. Notable
+file formats and data structures that are supported are exposure
+time-series from the model FOCUS <em>TOXSWA</em>, as well as fitted
+<em>GUTS-RED</em> model parameter sets from <a href="https://cran.r-project.org/package=morse"><em>morse</em></a>.</p>
+</div>
+<div id="how-to-derive-model-inputs" class="section level1">
+<h1>How to derive model inputs</h1>
+<p>In general, all models require parameter values specific to the
+simulated species and substance. Some scenario types contain default
+values for selected model parameters as recommended by model authors.
+Scenarios providing default values include:</p>
+<ul>
+<li><code>Lemna_Schmitt()</code> and derived models are parameterized
+according to Schmitt <em>et al.</em> (2013)</li>
+<li><code>Lemna_SETAC()</code>, <code>Myrio()</code>, and derived models
+are parameterized as recommended by Klein <em>et al.</em> (2021)</li>
+</ul>
+<p>In addition, some models require values for environmental factors
+such as temperature and nutrient concentrations. These values or
+time-series are specific to a certain scenario and must be chosen
+accordingly.</p>
+<p>Parameters of TKTD sub-models are substance-specific and are usually
+obtained by fitting model parameters to observed data. The
+<em>cvasi</em> package supports this process with the function
+<code>calibrate()</code> which uses a frequentist approach for parameter
+fitting. However, parameters can also be derived by other means.
+Generally, the user is responsible for choosing model parameters and the
+package does not impose any restrictions in this regard.</p>
+<p>The package function <code>calibrate()</code> supports the following
+operation modes:</p>
+<ul>
+<li>Fitting of a single parameter or multiple parameters
+simultaneously</li>
+<li>Fit to one or more independent datasets</li>
+<li>Weighting of datasets</li>
+<li>Choosing the error function which is minimized</li>
+<li>Selecting one of multiple optimization algorithms</li>
+</ul>
+<p>Parameter fitting builds upon the <em>R</em> function
+<code>stats::optim()</code> and it exposes full control over the fitting
+process. In this context, a dataset is represented by a <em>calibration
+set</em> object which consists of a scenario, observed data, and an
+optional weighting term. Please refer to the <a href="cvasi-2-howto.html">Modeling Howto</a> for a description of the
+fitting process using <code>calibrate()</code>.</p>
+<p>As an alternative for <em>GUTS-RED</em> type models, model parameters
+can also be obtained using the <a href="https://cran.r-project.org/package=morse"><em>morse</em>
+package</a>. It uses a Bayesian approach for parameter fitting.</p>
+</div>
+<div id="description-of-model-outputs" class="section level1">
+<h1>Description of model outputs</h1>
+<p>The <em>cvasi</em> package does not use or define any custom file
+formats for model outputs but strictly relies on common <em>R</em> data
+structures. Simulation results and assessment endpoints are returned in
+tabular formats which can easily be serialized to common file formats
+such as <code>.csv</code> or <em>Microsoft Excel</em> files for further
+processing and data storage.</p>
+<p>The following subsections will describe in detail the return values
+of common package routines for simulating and assessing scenarios.</p>
+<div id="simulation-results" class="section level2">
+<h2>Simulation results</h2>
+<p>The return value of <code>simulate()</code> is a
+<code>data.frame</code> containing the value of each state variable at
+each requested output time. The first column represents <em>time</em>,
+followed by columns for each state variable:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="do">## Display selected scenario properties</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>metsulfuron<span class="sc">@</span>times  <span class="co"># Output times</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt;  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>metsulfuron<span class="sc">@</span>init   <span class="co"># Initial state</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt;    BM     E M_int </span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt;    50     1     0</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="do">## Simulate the sample scenario</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span> <span class="fu">simulate</span>()</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt;    time       BM E     M_int      C_int  FrondNo</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt; 1     0 50.00000 1   0.00000 0.00000000 500000.0</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt; 2     1 52.15860 1 223.07463 0.25609895 521586.0</span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt; 3     2 52.43488 1 369.63428 0.42211960 524348.8</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt; 4     3 52.33910 1 463.02568 0.52973949 523391.0</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; 5     4 52.17916 1 521.89216 0.59891777 521791.6</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt; 6     5 52.00010 1 558.62619 0.64328091 520001.0</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co">#&gt; 7     6 51.81396 1 581.21672 0.67169918 518139.6</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; 8     7 51.63733 1 474.07075 0.54974702 516373.3</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt; 9     8 51.61800 1 301.84473 0.35015952 516180.0</span></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="co">#&gt; 10    9 52.32258 1 192.18697 0.21994713 523225.8</span></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co">#&gt; 11   10 54.34844 1 122.36700 0.13482199 543484.4</span></span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co">#&gt; 12   11 57.08420 1  77.91205 0.08172826 570842.0</span></span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a><span class="co">#&gt; 13   12 59.99453 1  49.60723 0.04951273 599945.3</span></span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="co">#&gt; 14   13 62.96107 1  31.58532 0.03003978 629610.7</span></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a><span class="co">#&gt; 15   14 65.95873 1  20.11063 0.01825732 659587.3</span></span></code></pre></div>
+<p>The model state in the first row is, by definition, equal to the
+initial state of the scenario. The simulation result may contain
+additional columns that are derived variables or intermediate model
+variables. In case of the <code>metsulfuron</code> scenario, the
+internal toxicant concentration (<code>C_int</code>) was derived from
+<code>BM</code>, <code>M_int</code>, and model parameters. The number of
+fronds (<code>FrondNo</code>) was derived from <code>BM</code> and model
+parameters. Additional outputs such as <code>C_int</code> and
+<code>FrondNo</code> are included in results for user convenience and to
+support model understanding. Additional outputs can be disabled by
+setting the optional argument <code>nout=0</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="fu">simulate</span>(<span class="at">nout=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt;   time       BM E    M_int</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt; 1    0 50.00000 1   0.0000</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&gt; 2    1 52.15860 1 223.0746</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt; 3    2 52.43488 1 369.6343</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="co">#&gt; 4    3 52.33910 1 463.0257</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt; 5    4 52.17916 1 521.8922</span></span></code></pre></div>
+<p>Intermediate model variables can be enabled in the same manner:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="fu">simulate</span>(<span class="at">nout=</span><span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt;   time       BM E    M_int     C_int  FrondNo   C_int_u BM_fresh k_phot_eff</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; 1    0 50.00000 1   0.0000 0.0000000 500000.0 0.0000000 835.0000 0.07548561</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt; 2    1 52.15860 1 223.0746 0.2560990 521586.0 0.3414653 871.0486 0.03746125</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="co">#&gt; 3    2 52.43488 1 369.6343 0.4221196 524348.8 0.5628261 875.6624 0.01993781</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="co">#&gt; 4    3 52.33910 1 463.0257 0.5297395 523391.0 0.7063193 874.0630 0.01760497</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt; 5    4 52.17916 1 521.8922 0.5989178 521791.6 0.7985570 871.3920 0.01699677</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="co">#&gt;   k_resp_eff     f_Eff P_up_eff</span></span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a><span class="co">#&gt; 1 0.02030631 1.0000000   0.0054</span></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="co">#&gt; 2 0.02030631 0.5049202   0.0054</span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a><span class="co">#&gt; 3 0.02030631 0.2693320   0.0054</span></span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a><span class="co">#&gt; 4 0.02030631 0.2376343   0.0054</span></span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a><span class="co">#&gt; 5 0.02030631 0.2291285   0.0054</span></span></code></pre></div>
+</div>
+<div id="effect-levels" class="section level2">
+<h2>Effect levels</h2>
+<p>The return value of <code>effect()</code> is a
+<code>data.frame</code> containing the effect level of each selected
+endpoint. The first column, <code>scenario</code>, contains the original
+scenario which was the basis of the assessment. Followed by the effect
+level and the exposure window in which the maximum effect was
+observed:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">%&gt;%</span>  <span class="co"># restrict scenario to the period [0,7]</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="fu">effect</span>()</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 7</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="co">#&gt;   scenario      BM BM.dat.start BM.dat.end     r r.dat.start r.dat.end</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt; 0.268            0          7 0.906           0         7</span></span></code></pre></div>
+<p>Effect levels are reported as a fraction relative to a control
+scenario. Effects can be converted to percentages by multiplying the
+value with <code>100</code> (%). For scenarios with moving exposure
+windows disabled, the reported window will cover the entire simulation
+period. If multiple windows result in identical maximum effect levels,
+the first matching window will be reported. The table’s content can be
+reduced to endpoints only by setting the argument
+<code>ep_only=TRUE</code>.</p>
+<p><code>effect()</code> can also be instructed to return the effect
+levels of all assessed exposure windows by setting the argument
+<code>max_only=FALSE</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  <span class="fu">set_window</span>(<span class="at">length=</span><span class="dv">7</span>, <span class="at">interval=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span>   <span class="co"># enable moving exposure windows</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="fu">effect</span>(<span class="at">max_only=</span><span class="cn">FALSE</span>)                 <span class="co"># return effects of all windows</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 5</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#&gt;   scenario              BM            r dat.start dat.end</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;             &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt;  0.268         0.906               0       7</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="co">#&gt; 2 &lt;LmnSchmS&gt;  0.265         0.895               1       8</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="co">#&gt; 3 &lt;LmnSchmS&gt;  0.248         0.829               2       9</span></span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="co">#&gt; 4 &lt;LmnSchmS&gt;  0.205         0.669               3      10</span></span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a><span class="co">#&gt; 5 &lt;LmnSchmS&gt;  0.147         0.463               4      11</span></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a><span class="co">#&gt; 6 &lt;LmnSchmS&gt;  0.0739        0.223               5      12</span></span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a><span class="co">#&gt; 7 &lt;LmnSchmS&gt;  0.00315       0.00918             6      13</span></span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a><span class="co">#&gt; 8 &lt;LmnSchmS&gt; -0.0000000571 -0.000000166         7      14</span></span></code></pre></div>
+<p>In few cases, <code>effect()</code> may report spurious non-zero
+effect levels that are very close to zero. These can either be avoided
+by increasing the numerical precision of simulations or by setting a
+marginal effect threshold which instructs <code>effect()</code> to zero
+any effect below that threshold. A warning will be shown if a marginal
+effect threshold greater than 1% is chosen. Applying a threshold of 1%
+to the previous example results in zeroing the effect in the last and
+second to last exposure window but leaving the remaining results
+unchanged:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>  <span class="fu">set_window</span>(<span class="at">length=</span><span class="dv">7</span>, <span class="at">interval=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span>         <span class="co"># enable moving exposure windows</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="fu">effect</span>(<span class="at">max_only=</span><span class="cn">FALSE</span>, <span class="at">marginal_effect=</span><span class="fl">0.01</span>) <span class="co"># return effects of all windows</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 5</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co">#&gt;   scenario       BM     r dat.start dat.end</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;      &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt; 0.268  0.906         0       7</span></span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co">#&gt; 2 &lt;LmnSchmS&gt; 0.265  0.895         1       8</span></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="co">#&gt; 3 &lt;LmnSchmS&gt; 0.248  0.829         2       9</span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a><span class="co">#&gt; 4 &lt;LmnSchmS&gt; 0.205  0.669         3      10</span></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="co">#&gt; 5 &lt;LmnSchmS&gt; 0.147  0.463         4      11</span></span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a><span class="co">#&gt; 6 &lt;LmnSchmS&gt; 0.0739 0.223         5      12</span></span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a><span class="co">#&gt; 7 &lt;LmnSchmS&gt; 0      0             6      13</span></span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a><span class="co">#&gt; 8 &lt;LmnSchmS&gt; 0      0             7      14</span></span></code></pre></div>
+</div>
+<div id="effect-profiles" class="section level2">
+<h2>Effect profiles</h2>
+<p>The return value of <code>epx()</code> is a <code>data.frame</code>
+containing the effect profile (<em>EPx</em>) of each selected endpoint
+and effect level. The first column, <code>scenario</code>, contains the
+original scenario which was the basis of the assessment. Followed by the
+derived effect profiles, i.e. the multiplication factors to achieve x%
+effect:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span> <span class="fu">epx</span>()</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&gt; Warning in epx(.): Some scenarios have failed (n=1), result will include NAs</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&gt;   **  multiplication factor out of range: BM.EP50 &gt; 1e+30</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 6</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="co">#&gt;   scenario   BM.EP10 r.EP10 BM.EP50 r.EP50 error                                </span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;       &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                                </span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt;   0.395  0.325      NA  0.880 &quot; multiplication factor out of range…</span></span></code></pre></div>
+<p>For the sample <code>metsulfuron</code> scenario, a factor of
+<code>0.395</code> would need to be applied to the exposure series to
+achieve an effect level of 10% on biomass (<em>BM</em>). An effect level
+of 50% on biomass is unattainable with the tested factors ranging from
+<code>1e-30</code> to <code>1e30</code> which is demonstrated by the
+warning message and the <code>NA</code> value for
+<code>BM.EP50</code>.</p>
+<p>The table’s content can be reduced to endpoints only by setting the
+argument <code>ep_only=TRUE</code>. The range of tested factors can be
+controlled by setting the arguments <code>min_factor</code> and
+<code>max_factor</code>. Multiplication factors exceeding this range
+will raise a warning and <code>NA</code> will be returned for that
+<em>EPx</em>. Finding multiplication factors can be cut short if a
+certain margin of safety is reached by using the argument
+<code>factor_cutoff</code>: if the algorithm identifies that an
+<em>EPx</em> greater or equal to <code>factor_cutoff</code> is required,
+then <code>factor_cutoff</code> is reported as the result. This approach
+may be used to save computational resources for long running models if
+the exact <em>EPx</em> value above the cutoff is not of interest.</p>
+<p>The precision of <em>EPx</em> values is controlled by the argument
+<code>effect_tolerance</code> and is given as the upper absolute error
+threshold of effects that is deemed acceptable. The default value of
+<code>0.001</code> ensures that a derived <em>EPx</em> will result in an
+effect of x% ± 0.1. Decreasing the <code>effect_tolerance</code> will
+result in additional model iterations and longer runtime.</p>
+<p>The algorithm’s inner workings can be examined by setting the
+argument <code>verbose=TRUE</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>  <span class="fu">set_endpoints</span>(<span class="st">&quot;BM&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="fu">epx</span>(<span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&gt; epx: screening multiplication factors</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&gt;   start: 10</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 1 &lt;&lt;&lt;</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 0.1 &lt;&lt;&lt;</span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 0.55</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 0.325</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 0.4375</span></span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 0.38125</span></span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 0.409375</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a><span class="co">#&gt;   BM.EP10: 0.3953125</span></span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 100 &gt;&gt;&gt;</span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1000 &gt;&gt;&gt;</span></span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 10000 &gt;&gt;&gt;</span></span>
+<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+05 &gt;&gt;&gt;</span></span>
+<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+06 &gt;&gt;&gt;</span></span>
+<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+07 &gt;&gt;&gt;</span></span>
+<span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+08 &gt;&gt;&gt;</span></span>
+<span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+09 &gt;&gt;&gt;</span></span>
+<span id="cb26-22"><a href="#cb26-22" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+10 &gt;&gt;&gt;</span></span>
+<span id="cb26-23"><a href="#cb26-23" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+11 &gt;&gt;&gt;</span></span>
+<span id="cb26-24"><a href="#cb26-24" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+12 &gt;&gt;&gt;</span></span>
+<span id="cb26-25"><a href="#cb26-25" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+13 &gt;&gt;&gt;</span></span>
+<span id="cb26-26"><a href="#cb26-26" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+14 &gt;&gt;&gt;</span></span>
+<span id="cb26-27"><a href="#cb26-27" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+15 &gt;&gt;&gt;</span></span>
+<span id="cb26-28"><a href="#cb26-28" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+16 &gt;&gt;&gt;</span></span>
+<span id="cb26-29"><a href="#cb26-29" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+17 &gt;&gt;&gt;</span></span>
+<span id="cb26-30"><a href="#cb26-30" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+18 &gt;&gt;&gt;</span></span>
+<span id="cb26-31"><a href="#cb26-31" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+19 &gt;&gt;&gt;</span></span>
+<span id="cb26-32"><a href="#cb26-32" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+20 &gt;&gt;&gt;</span></span>
+<span id="cb26-33"><a href="#cb26-33" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+21 &gt;&gt;&gt;</span></span>
+<span id="cb26-34"><a href="#cb26-34" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+22 &gt;&gt;&gt;</span></span>
+<span id="cb26-35"><a href="#cb26-35" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+23 &gt;&gt;&gt;</span></span>
+<span id="cb26-36"><a href="#cb26-36" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+24 &gt;&gt;&gt;</span></span>
+<span id="cb26-37"><a href="#cb26-37" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+25 &gt;&gt;&gt;</span></span>
+<span id="cb26-38"><a href="#cb26-38" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+26 &gt;&gt;&gt;</span></span>
+<span id="cb26-39"><a href="#cb26-39" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+27 &gt;&gt;&gt;</span></span>
+<span id="cb26-40"><a href="#cb26-40" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+28 &gt;&gt;&gt;</span></span>
+<span id="cb26-41"><a href="#cb26-41" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+29 &gt;&gt;&gt;</span></span>
+<span id="cb26-42"><a href="#cb26-42" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+30 &gt;&gt;&gt;</span></span>
+<span id="cb26-43"><a href="#cb26-43" tabindex="-1"></a><span class="co">#&gt;   BM.EP50: 1e+31 &gt;&gt;&gt;</span></span>
+<span id="cb26-44"><a href="#cb26-44" tabindex="-1"></a><span class="co">#&gt; Warning in epx(., verbose = TRUE): Some scenarios have failed (n=1), result will include NAs</span></span>
+<span id="cb26-45"><a href="#cb26-45" tabindex="-1"></a><span class="co">#&gt;   **  multiplication factor out of range: BM.EP50 &gt; 1e+30</span></span>
+<span id="cb26-46"><a href="#cb26-46" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span id="cb26-47"><a href="#cb26-47" tabindex="-1"></a><span class="co">#&gt;   scenario   BM.EP10 BM.EP50 error                                              </span></span>
+<span id="cb26-48"><a href="#cb26-48" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                                              </span></span>
+<span id="cb26-49"><a href="#cb26-49" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt;   0.395      NA &quot; multiplication factor out of range: BM.EP50 &gt; 1e…</span></span></code></pre></div>
+<p>In this example, the binary search finds a <code>BM.EP10</code> with
+acceptable precision in less than ten iterations. For the
+<code>BM.EP50</code>, the algorithm re-uses the knowledge gained from
+previously performed calculations but is ultimately unable to find a
+suitable multiplication factor within the allowed range of
+multiplication factors.</p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ul>
+<li>EFSA PPR Panel (EFSA Panel on Plant Protection Products and their
+Residues), Ockleford C., Adriaanse P., Berny P., et al., 2018:
+<em>Scientific Opinion on the state of the art of
+Toxicokinetic/Toxicodynamic (TKTD) effect models for regulatory risk
+assessment of pesticides for aquatic organisms</em>. EFSA Journal 2018;
+16(8):5377, 188 pp. DOI: <a href="https://doi.org/10.2903/j.efsa.2018.5377">10.2903/j.efsa.2018.5377</a></li>
+<li>Geiger D.L., Call D.J., and Brooke L.T., 1988: <em>Acute toxicities
+of organic chemicals to fathead minnows (Pimephales promelas): Volume
+IV</em>, pp. 195-197. University of Wisconsin-Superior, Center for Lake
+Superior Environmental Studies. ISBN 9780961496838.</li>
+<li>Klein J., Cedergreen N., Heine S., Reichenberger S., Rendal C.,
+Schmitt W., Hommen U., 2021: <em>Refined description of the Lemna TKTD
+growth model based on Schmitt et al. (2013) - equation system and
+default parameters</em>. Report of the working group <em>Lemna</em> of
+the SETAC Europe Interest Group Effect Modeling. Version 1, uploaded on
+22. Sept. 2021. <a href="https://www.setac.org/group/effect-modeling.html" class="uri">https://www.setac.org/group/effect-modeling.html</a></li>
+<li>Schmitt W., Bruns E., Dollinger M., and Sowig P., 2013:
+<em>Mechanistic TK/TD-model simulating the effect of growth inhibitors
+on Lemna populations</em>. Ecol Model 255, pp. 1-10. DOI: <a href="https://doi.org/10.1016/j.ecolmodel.2013.01.017">10.1016/j.ecolmodel.2013.01.017</a></li>
+<li>Wickham H. and Grolemund G., 2017: <em>R for Data Science: Import,
+Tidy, Transform, Visualize, and Model Data</em> (1st ed.). O’Reilly
+Media. <a href="https://r4ds.had.co.nz" class="uri">https://r4ds.had.co.nz</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

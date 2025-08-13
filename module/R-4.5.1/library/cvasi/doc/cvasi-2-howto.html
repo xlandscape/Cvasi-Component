@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="N. Kehrein and contributors" />
+
+
+<title>Modeling Howto</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Modeling Howto</h1>
+<h4 class="author">N. Kehrein and contributors</h4>
+<h4 class="date">24 October, 2024</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#how-to-access-scenario-properties" id="toc-how-to-access-scenario-properties">How to access scenario
+properties</a></li>
+<li><a href="#using-tidyr-syntax" id="toc-using-tidyr-syntax">Using
+<em>tidyr</em> syntax</a></li>
+<li><a href="#predictions" id="toc-predictions">Predictions</a></li>
+<li><a href="#moving-exposure-windows" id="toc-moving-exposure-windows">Moving exposure windows</a></li>
+<li><a href="#simulating-biomass-transfers" id="toc-simulating-biomass-transfers">Simulating biomass
+transfers</a></li>
+<li><a href="#fitting-model-parameters" id="toc-fitting-model-parameters">Fitting model parameters</a></li>
+<li><a href="#changes-in-parameter-values-over-time" id="toc-changes-in-parameter-values-over-time">Changes in parameter
+values over time</a></li>
+<li><a href="#decrease-assessment-runtime" id="toc-decrease-assessment-runtime">Decrease assessment
+runtime</a></li>
+<li><a href="#implementing-custom-models" id="toc-implementing-custom-models">Implementing custom models</a></li>
+<li><a href="#complete-working-example" id="toc-complete-working-example">Complete working example</a>
+<ul>
+<li><a href="#setting-up-a-scenario" id="toc-setting-up-a-scenario">Setting up a scenario</a></li>
+<li><a href="#simulating-a-scenario-and-plotting" id="toc-simulating-a-scenario-and-plotting">Simulating a scenario and
+plotting</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p>This Howto provides instructions on how to address certain modeling
+challenges and offers additional details and context for certain
+features of the package. A final section provides a complete worked out
+example. For a more general overview, please refer to the <a href="cvasi-1-manual.html">manual</a>.</p>
+<div id="how-to-access-scenario-properties" class="section level2">
+<h2>How to access scenario properties</h2>
+<p>The package provides a number of <code>set*()</code> functions to
+modify scenario properties such as <code>set_param()</code> and
+<code>set_times()</code>. Analogous <code>set*</code> functions are not
+provided because, generally, it should not be necessary to retrieve data
+from scenarios. However, it is possible (but not recommended) to access
+all scenario settings via objects <em>slots</em>. A <em>slot</em> is the
+name for an object attribute in <em>R</em>. The slots of an object can
+be accessed by using the <code>@</code> operator. It behaves similar to
+the <code>$</code> operator on named lists:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Create a new scenario object</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>myscenario <span class="ot">&lt;-</span> <span class="fu">Lemna_Schmitt</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Get model name</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">get_model</span>(myscenario)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Lemna_Schmitt&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co"># Set a custom tag to identify the scenario</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>myscenario <span class="sc">%&gt;%</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="fu">set_tag</span>(<span class="st">&quot;Lab experiment #1&quot;</span>) <span class="ot">-&gt;</span> myscenario</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co"># Get custom tag</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="fu">get_tag</span>(myscenario)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Lab experiment #1&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># The tag is also displayed when printing scenario properties</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>myscenario</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; &#39;Lemna_Schmitt&#39; scenario</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; tag: Lab experiment #1</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt; param: Emax=1, AperBM=1000, Kbm=1, P_Temp=0, MolWeight=390.4, k_phot_fix=1,</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="co">#&gt; k_phot_max=0.47, k_resp=0.05, k_loss=0, Tmin=8, Tmax=40.5, Topt=26.7, t_ref=25,</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt; Q10=2, k_0=3, a_k=5e-05, C_P=0.3, CP50=0.0043, a_P=1, KiP=101, C_N=0.6,</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; CN50=0.034, a_N=1, KiN=604, BM50=176, mass_per_frond=1e-04, BMw2BMd=16.7</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; init : BM=0.0012, E=1, M_int=0</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt; endpt: BM, r</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt; times: none</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="co">#&gt; expsr:</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co">#&gt; &gt;&gt; exposure series is empty</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="co"># Accessing scenario slots and their default values</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>myscenario<span class="sc">@</span>forcings.req <span class="co"># forcings required for effect calculations</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="co">#&gt; [1] &quot;temp&quot; &quot;rad&quot;</span></span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>myscenario<span class="sc">@</span>endpoints    <span class="co"># available effect endpoints</span></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="co">#&gt; [1] &quot;BM&quot; &quot;r&quot;</span></span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>myscenario<span class="sc">@</span>control.req  <span class="co"># are control runs required for effect calculation?</span></span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>The previous example displays some of the default values of a
+<em>Lemna_Schmitt</em> scenario. The set of available slots depends on
+the model type and is documented in the package help. For instance,
+scenario properties shared by all models are documented in the effect
+scenario class:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Call the help page of effect scenarios class</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>?scenarios</span></code></pre></div>
+<p>A scenario class inherits all slots from its ancestors. A notable
+class which modifies simulation behavior and provides additional
+scenario properties is <code>Transferable</code>: it provides
+capabilities to consider biomass transfers at defined time points during
+simulation. Details about its class slots and functionality are
+described in the help pages.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Call the help page of the biomass transfer class</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>?Transferable</span></code></pre></div>
+</div>
+<div id="using-tidyr-syntax" class="section level2">
+<h2>Using <em>tidyr</em> syntax</h2>
+<p>The <em>tidyr</em> syntax, popularized by the <em>tidyverse</em>
+packages in R, provides a coherent and efficient approach to data
+manipulation and analysis. The <em>tidyverse</em>, which includes the
+widely used <em>dplyr</em> and <em>ggplot2</em> packages, follows a
+standardized grammar that makes code more readable and intuitive.
+<em>tidyr</em> syntax emphasizes the use of functions with clear and
+descriptive names. This makes it easier for users to understand and
+reproduce analyses. The <code>%&gt;%</code> (pipe) operator is a key
+component of <em>tidyr</em> syntax and enables fluent and expressive
+concatenation of operations. Overall, the introduction of <em>tidyr</em>
+syntax improves code readability, reproducibility, and collaboration,
+resulting in maintainable data analysis pipelines.</p>
+<p>In brief, the advantages of <em>tidyr</em> syntax are:</p>
+<ul>
+<li>a series of statements can be combined to an intuitive workflow
+using the pipeline (<code>%&gt;%</code>) operator</li>
+<li>a short cut for the pipe (<code>%&gt;%</code>) operator is
+Ctrl+Shift+M</li>
+<li>pipelines reduce the need for intermediary variables (but thoughtful
+intermediates are recommended)</li>
+<li><em>tidy</em> verbs generally take <code>list</code> data types as
+input and return these also as output</li>
+<li>some verbs enrich outputs with additional information, effectively
+extending the output data to a table</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># The example scenario `metsulfuron` based on the Lemna model by Schmitt et al. (2013)</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># is modified by setting a new exposure series and initial state. Then, it is</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># simulated.</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="fu">set_noexposure</span>() <span class="sc">%&gt;%</span>  <span class="co"># set no exposure (i.e., a control run)</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="fu">set_init</span>(<span class="fu">c</span>(<span class="at">BM =</span> <span class="dv">50</span>)) <span class="sc">%&gt;%</span>  <span class="co"># set initial biomass</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="fu">simulate</span>()</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;    time       BM E M_int C_int  FrondNo</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 1     0 50.00000 1     0     0 500000.0</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 2     1 52.79250 1     0     0 527925.0</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 3     2 55.64673 1     0     0 556467.3</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; 4     3 58.55411 1     0     0 585541.1</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; 5     4 61.50533 1     0     0 615053.3</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; 6     5 64.49048 1     0     0 644904.8</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 7     6 67.49918 1     0     0 674991.8</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 8     7 70.52071 1     0     0 705207.1</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 9     8 73.54416 1     0     0 735441.6</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 10    9 76.55861 1     0     0 765586.1</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 11   10 79.55324 1     0     0 795532.4</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; 12   11 82.51755 1     0     0 825175.5</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; 13   12 85.44144 1     0     0 854414.4</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; 14   13 88.31537 1     0     0 883153.7</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; 15   14 91.13051 1     0     0 911305.1</span></span></code></pre></div>
+</div>
+<div id="predictions" class="section level2">
+<h2>Predictions</h2>
+<p>TKTD models have both species and substance specificity. If risks are
+identified at Tier 1 (standard test species approach) and exposure
+duration is expected to be shorter than in standard tests, the simplest
+solution is to develop TKTD models for standard test species. However,
+if Tier 2A (geometric mean/evidence weighting approach) or Tier 2B
+(species sensitivity distribution approach) information is available, it
+may be more appropriate to develop TKTD models for a wider range of
+species to increase the accuracy of the risk assessment. Validated TKTD
+models for these different species can be used as an alternative to
+assess specific risks using available field exposure profiles. This
+includes the calculation of exposure profile specific LPx/EPx values
+(multiplication factor for a specific overall exposure profile causing x
+% lethality or effect) based on an appropriate aquatic exposure
+assessment.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Initialize the random numbers generator</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># Generating a random exposure series spanning 14 days</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>random_conc <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">15</span>, <span class="at">min=</span><span class="dv">0</span>, <span class="at">max=</span><span class="fl">0.1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>exposure_profile <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">14</span>, <span class="at">conc=</span>random_conc)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># Run EPx calculations</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>minnow_it <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="fu">set_exposure</span>(exposure_profile) <span class="sc">%&gt;%</span>  <span class="co"># set a specific exposure scenario</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">epx</span>()  <span class="co"># run EPx calculations</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;   scenario   L.EP10 L.EP50</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;      &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; 1 &lt;GutsRdIt&gt;   67.0   111.</span></span></code></pre></div>
+</div>
+<div id="moving-exposure-windows" class="section level2">
+<h2>Moving exposure windows</h2>
+<p>A moving time window is a computing technique used in data analysis.
+Data is systematically analysed within a window of fixed length that
+moves or slides through the data set, in our case an exposure
+time-series. The window captures a subset of successive data points, and
+as it moves through the data; simulations and effect calculations are
+performed for each window.</p>
+<p><code>effect()</code> can report effect levels for all evaluated
+exposure windows on demand:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Derive effect levels of all exposure windows</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">set_window</span>(<span class="at">length=</span><span class="dv">7</span>, <span class="at">interval=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">effect</span>(<span class="at">max_only=</span><span class="cn">FALSE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 5</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;   scenario              BM            r dat.start dat.end</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;             &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt;  0.268         0.906               0       7</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; 2 &lt;LmnSchmS&gt;  0.265         0.895               1       8</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; 3 &lt;LmnSchmS&gt;  0.248         0.829               2       9</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; 4 &lt;LmnSchmS&gt;  0.205         0.669               3      10</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; 5 &lt;LmnSchmS&gt;  0.147         0.463               4      11</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 6 &lt;LmnSchmS&gt;  0.0739        0.223               5      12</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 7 &lt;LmnSchmS&gt;  0.00315       0.00918             6      13</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 8 &lt;LmnSchmS&gt; -0.0000000571 -0.000000166         7      14</span></span></code></pre></div>
+<p>The resulting table describes how effect levels change when the
+exposure window moves along the exposure series. It is also possible to
+specify the marginal effect threshold of reported results (this prevents
+overinterpretation of spurious effect levels originating from marginal
+numerical errors introduced during simulation), as in the following
+example:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Only report effect levels larger than 1e-5 = 0.001%</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">set_window</span>(<span class="at">length=</span><span class="dv">7</span>, <span class="at">interval=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">effect</span>(<span class="at">max_only=</span><span class="cn">FALSE</span>, <span class="at">marginal_effect=</span><span class="fl">1e-5</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 5</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   scenario        BM       r dat.start dat.end</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt; 0.268   0.906           0       7</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 2 &lt;LmnSchmS&gt; 0.265   0.895           1       8</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 3 &lt;LmnSchmS&gt; 0.248   0.829           2       9</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 4 &lt;LmnSchmS&gt; 0.205   0.669           3      10</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 5 &lt;LmnSchmS&gt; 0.147   0.463           4      11</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; 6 &lt;LmnSchmS&gt; 0.0739  0.223           5      12</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 7 &lt;LmnSchmS&gt; 0.00315 0.00918         6      13</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 8 &lt;LmnSchmS&gt; 0       0               7      14</span></span></code></pre></div>
+<p>The effect over all moving windows can be visualized using
+<code>ggplot</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># Generate a random exposure series spanning 14 days</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>ts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">14</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                 <span class="at">conc =</span> <span class="fu">runif</span>(<span class="dv">15</span>, <span class="at">min=</span><span class="dv">0</span>, <span class="at">max=</span><span class="fl">0.1</span>))</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co"># Run EPx calculations for a window length of 7 days and a step size of 1 day</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="fu">set_exposure</span>(ts) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="fu">set_window</span>(<span class="at">length=</span><span class="dv">7</span>, <span class="at">interval=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  <span class="fu">effect</span>(<span class="at">max_only=</span><span class="cn">FALSE</span>) <span class="ot">-&gt;</span> results</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>results</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 5</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt;   scenario          BM        r dat.start dat.end</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;         &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; 1 &lt;LmnSchmS&gt; 0.000113  0.000327         0       7</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; 2 &lt;LmnSchmS&gt; 0.000115  0.000333         1       8</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; 3 &lt;LmnSchmS&gt; 0.000109  0.000317         2       9</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; 4 &lt;LmnSchmS&gt; 0.0000971 0.000282         3      10</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; 5 &lt;LmnSchmS&gt; 0.000104  0.000302         4      11</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; 6 &lt;LmnSchmS&gt; 0.000119  0.000345         5      12</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; 7 &lt;LmnSchmS&gt; 0.000136  0.000394         6      13</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt; 8 &lt;LmnSchmS&gt; 0.000116  0.000337         7      14</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co"># Create a plot of effects over time</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="fu">ggplot</span>(results) <span class="sc">+</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(dat.start, BM<span class="sc">*</span><span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Start of window (day)&quot;</span>, <span class="at">y=</span><span class="st">&quot;Effect on biomass (%)&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --> The
+effect plot shows the effect for the time point where each window
+starts. Effects are not available, and therefore not plotted, for time
+points where the window exceeds the simulated timeframe.</p>
+</div>
+<div id="simulating-biomass-transfers" class="section level2">
+<h2>Simulating biomass transfers</h2>
+<p>A transfer refers to an event where a certain amount of biomass (BM)
+is moved to a new medium after a period of time. This feature replicates
+a procedure occurring e.g. in <em>Lemna</em> effect studies and may be
+necessary to recreate study results. At each transfer, a defined amount
+of biomass is transferred to a new medium. This is modeled by
+interrupting the simulation at a transfer time point, modifying the
+biomass level BM, and scaling affected compartments according to new
+biomass levels. Scaling of compartments depending on biomass, such as
+internal toxicant mass, is necessary to correctly reflect mass balances
+and concentrations over time.</p>
+<p>Option 1: Regular intervals</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">set_init</span>(<span class="fu">c</span>(<span class="at">BM=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">set_noexposure</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">set_transfer</span>(<span class="at">interval=</span><span class="dv">3</span>, <span class="at">biomass=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">simulate</span>() <span class="ot">-&gt;</span> result</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>result</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;    time       BM E M_int C_int  FrondNo</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 1     0 1.000000 1     0     0 10000.00</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; 2     1 1.088183 1     0     0 10881.83</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; 3     2 1.184076 1     0     0 11840.76</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; 4     3 1.288342 1     0     0 12883.42</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; 5     4 1.088183 1     0     0 10881.83</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 6     5 1.184076 1     0     0 11840.76</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 7     6 1.288342 1     0     0 12883.42</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 8     7 1.088183 1     0     0 10881.83</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 9     8 1.184076 1     0     0 11840.76</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; 10    9 1.288343 1     0     0 12883.43</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; 11   10 1.088183 1     0     0 10881.83</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt; 12   11 1.184077 1     0     0 11840.77</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; 13   12 1.288343 1     0     0 12883.43</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt; 14   13 1.088184 1     0     0 10881.84</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; 15   14 1.184077 1     0     0 11840.77</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="fu">ggplot</span>(result) <span class="sc">+</span></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(time, BM)) <span class="sc">+</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time (days)&quot;</span>, <span class="at">y=</span><span class="st">&quot;Biomass (g_dw/m2)&quot;</span>, <span class="at">title=</span><span class="st">&quot;Biomass transfer every three days&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAABGlBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZrYzMzM6AAA6ADo6AGY6OgA6Ojo6OmY6ZmY6ZpA6ZrY6kLY6kNtNTU1NTW5NTY5NbqtNjshmAABmADpmAGZmOgBmOmZmZmZmkJBmkNtmtrZmtttmtv9uTU1uTW5uTY5ubqtuq+SOTU2OTW6OTY6OyP+QOgCQZgCQZjqQZmaQkGaQkLaQtpCQttuQ27aQ2/+rbk2rbm6rbo6ryKur5P+2ZgC2Zjq2kDq2kGa2tpC2ttu229u22/+2/9u2///Ijk3I///bkDrbkGbbtmbbtpDb27bb29vb/7bb/9vb///kq27k///r6+v/tmb/yI7/25D/27b/29v/5Kv//7b//8j//9v//+T////cXbKvAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAOPklEQVR4nO2dDXvbthHHYafW1HRtMylLvXnrFrdd20V7a+pui7q1y5Jo6dY5saLOisPv/zUGgATxdsCBJGzT0N3zxKHIPw/HH/FGijqyiixq7LoDGLsRIMQIEGIECDEChBgBQowAIUaAEOsBaMWkvf+4qi4WB6f9y9784kma8GvGJgPKcYrsFnR/QGy/a1meo/00QGte2KR/MW6Rlw9IHtfF1+y4+76AI9zWg0uyirwiQNVmOmvK+uGIsbceyzXPp3u/qtZT9r4I4fk7jPGPHObv+cJ9c0EsL3jFmF0sJiu2/7jVco/fvGPvtaxrqyjlXdms6z2kqZV1TNvDSeXo/i7hbg9nZpEH3x81hdWu1C6VsSTt+ZT1r0F/2zupAXEe3PinzfQ9vrj3xbRuEk1TPK7jshbMaG9N2cGpqzXFNaCNKqXZo6pPUlu0cCqqmqP7XjCr1vyzUeRbR6oI6ardRe/cHKn41ANQ0wfN6k6al3pfrJQF3a+eiw2bqVi/L2vVhP+7c2ovaNJ8b+lHafln3h+vmCley2MRlem7WjFrHJgrBbLl/hNPtxSnc6kaVVMk//gvNmkL17uoJWnbw72HQzppHr+Iqzng5d6JXNoeHpyqZv6fb/4wlYd668N/CE27YEbbdESNtv4s2ooW1xVj1uzS7lEZK6sVP+31Xo5O7Ny0MKtIIa6X9C6Gv9Z9/z7oOZs0gGSTWQtAs6YfkKesrq+isS3VtKBdMKKVKFtt/Zl3DoZYHOO6OSt7J0Yfq1fKgwF1Ip61bjRtkaKIeknvYvhTJ2YAoLpChwFtD9l7f/q27gO+O6o7Wr1gR6u1BqBWnAJIrF1Kravja9sWdk2AdBMzAdXg2h7n379rOud2wYhWa01ASlw3MTXUG4D0Su5s70tRsq9bs1+3LQwEpHcx/VUZmpjoiO1O2gbEe1s+bB6crtlPTuWo1y6oYzppY1RaHb0WN530Qz4KL+qT0jJQK4WLXwrwvu5i8eO2hRlFakDmLtpfJTvp+0M6aRm2PcybgNSA3S4ZC62jmYpRa3X0Siyr+loNneY8r10pXTSdsqtbtW3aLlIBMrwY/lr3vQG9e6Kq8UZPFM1OWs4fH4qOQU757pxWekHa9ohN/lvH2GqNJtaK65m0KOXWfef6T62UYU2sVa1OzyvMIg1AhhfDnzDRC3YHdNNs2JVK+YB+OBpyQV08ID6BaLuUXlY6IN533xnkoHRAg40AIUaAECNAiBEgxKKAzj95Jv9/NZ//9NmVhDM+iwF61WARnF58oNaeaTOXg5YkGp+rBEBP7/71k7benLeL2UMZp6uUGmRQaWrQj7jFdijQ0gCdf3T3kVqZ/VyN01U3QFX1+nNFKHso43TVFVD19AEBCgF6de8l1aAgIDnGz+fUByVb9lDG6YoAYYIrB8S6BAyLA+WxJJUtJkAhI0A3FRDrAigghstzxdGoGAG6sYDibcwBBIsDgBxxHFAjJkABGy0ghvTSlquQGCzPE8eiasUECDYChERFgJCoCBAS1WgBsbMOgIJiqDxfHIlKiwkQaOMGFCXkAgLFIUC2GAFU/yFAoBEgJKrRAmI6vIjKPIpUQIA4HJUhJkCQESAkKgKERDVaQMyML6iyjiIRECQORmWKCRBgowcUI+QBgsRBQJYYAyT/J0CAXRGgHsac/2+C2N0p3VLOlXUq9OlNqUExsVceKA5FZYlH1cQIULwkAoSURICQknTwCYCiYrc8WByIyhb3A7Syf9NKgCxA20NFZqXTe+QFFCHkAwLEYUDmIgpILHYHtP25kczH+kCAulkkYLgkAhQ3Flh24kkRO+UFxHBUjrgPoGWTdmQdz5wVDhi2YgAt2yQQBOgM6qQP62RfEwJUe4EBiZQWBEh6AZuYBMWyAmKWKEioAjZ74iqymQVUAXGvTlqliiNAZ1c4zBMgxIoC1OSiy9nEnFDigJytcUBBMRSVJ+4FqE2tlrEGFQWoGekJkPQC1iACpL0AgLA5NAHK30l7c9YQoQra5q6oItv0CiAqX9yziaVk+woEDFtZgC6hky4L0CV00mUBqja3M3fSzBNFAPmbIoAiYj8qQNyzibHMnXRhgDxTuTvOP5rPVeqOnQUkU63bpjJQibwd5x/3yd1REqB6FmSO820GqlciuVKv7C9lARK2Yua3ql7+oI4ZqKD2G2zTIxHjQuOOogb05qtP1Xb4jILGAFGgClXgBuaKYl6Yp0oQBw0CxEcxeyLUAnr9WctnlwE1WdL1KK9HsQdaBAYMW3GAAk3M4rPrgNbMaGZNBqoXc2HdRzEGiUKAwPUhQFGxG1WKZyCgQBPD05tDAcNWHKDcV/PFARIPeFANUl5AQHI6jVQjKGDQWId4QwHbqytwLVIgLIZPiCkIAKqaN3IRIAhQc08601OuNxGQXgsB0s+5EqCr+G6+MEDqdmK2O4rdBpWAKxBQqPsAAfUdNcEatKpf/hcfxvyAo+GWBKhBk+kRPAK0e4BUE8syzLOgCAgt/F25Ja5C+1viyl/lG3j3wFwFAqrfWZdnJl0moBTzAo4FC4lKAJTh1z4EyA0lVFYCIBZ25QOKXET5gIJiCJBdFgFCyiJASFkECCnrcgGxiMiLjEVceYAifHxAYTEAyJmUXh8gL7QYIHtkAXb2xYmAwDAMAQEaAihmTsDoYRUESN8Siv0kwQkYPayCALUXq9EfbTgBJx1VLBLvqKKuonxcVxGx78r5CNcgdbsjdsfDLiXpqCJb/aOKuyJAiKtrBaTvB60GvYEc6/pZ9OPIxOD9oNXA5CbAJXj4XAGX4CEx/IyMK66sTwHzapArToN8OYDs7Qgge0BEANkDIgIICsMQEKCOgHKmxykSkPEI59AES86MKy5gUVe2GH3iwAIUFbuAPLEPqJL5X3I8vFAuoCRzSokfEiwiQG4oEcEOAnKnpFEFC6vC4rAZgOJiB5AvvlZAhgQHBIgjxjoAinomQIhnAoR4BgHxy3k0v9JOA1pOxAX9Kp7ixC0lfDxhEfMWUgDhv4IzACEwbUCAGALEK5C4lzjw+aCyAYmbQQRICgBAF4vZml+FLamJnQX6oM2UTVQ2vL6A/ClpRMSiKk/cARDWn1siSAwCSjK3lMDhREVKlQRIixMAKVUSID8MQ0CAoDAMAQQoxzyoaEAZ5kHAjAs+DEeMA2JxkRZ7NwshMwGBYghQjnlQ6YAGz4OKBpRjHlQ0oBzzoLIBJZlXin8sQCiQjmEqV5wMCL/sNwDB4msGJIWpgFpxCiB5QZIKyAvDEECAhudRLBsQ76QvFsfGD+p0ehwjk1D0qMoGJNAs+TCvemmVostcigMCp6TwYThiDBBDRa0Y/4L6zAQUEIcArfREsU3RZSztNiAxA+J09NNTXhPDUnSld/nspoid7C+zamk8udC5Dyq9BrnWFRA844IPwxEjgBguasX4F9RnBqCQmACBYRgCCJA7D7pEQGesAyAlTgLkeoZNuQqKIUDe8+NNii4C1NjQDFSBGVfgMJJUtjgRUIqoBRQUgDWIAGkBAGho0v/yAQ28WO0EqI/qKl1BgAYm/Q/NuFLivRmABnbS5QMa2EmXD2hg0v/yAQ1L+h+ccaXEezMApVmoFAJEgJr3qSNjfaiUXQA0JEVXeEqaEu/NADQoyRsBIkDUxCwBBGhAJx2+hC4KUIrBpRCgnQdUP8DZ+1KjfEDDalDkLh4BErYTgJZ8ABM3XZEXPoOl7AKg5cHpxYIdozdewVJ2AJC8nSgn0ev4U5xQKbEvEkoBJK8zakDdRzECRIDSAUHWfSy8MZalBkW/yyynBvV/r8ZOAEo2oBQCFAcUf1qAABEgAkSAAEE+QMgDSwSIABEgAgQIsgHCnpkkQDniJUCDA75qVwQIE+QChD62TYByxEuAsqgI0Ihc5QKU/Av1HCoCNCJXBAgTECBEkAdQ+i/Uc6gI0IhcESBMQIAQQRZAXX6hnkFFgEbkKgmQyrfw+rP5vZcEyDOVd+rNVw+qFx8QINfavFOvf/vMSN5hOOn0E/4MqpEBapvY+W9eVq8/f1ThGagKtBRAr+4pQMKyn6txuuoCSNcgAgQCCvZBozuqjK66AHrz1aeBUSxbvONzlQxI/AvOg7LFOz5XSYBAyx7KOF0RIExAgBABAUIEvQEZlnFWPU5XFQFCjQAhRoAQK/iHTHmMACFGgBAjQIgRIMT6A7Iu8YfZi/nceC/FEJM3aDJGNgCQ/VXHMHv6II+f+nuYnJENAGTfZhxkb/78CBelWP09TMbIqgGA7BvVg4w3ifk8TyWSt/jyRVYNAGR/1THIzj9+lKsWCUAZI6vGUYOk5emHRlSD8rb0nIBG0gfZX3UMMtEm3vwl2zCfMbJqPPOgu3maxIjmQbtiBAgxAoQYAUKMACFGgBC7XkAXiyan02Tz9klUV7/xI5wca/uz2P4D7PprUBxNbasm+WUkexiS3LC33QhAbfWIAEp7rUx3Gwsg/nfz9hfTJlvqcd36FA75YtPtIdv7I18jX2E1q1/6zmuW/CjYXFIVGhOgKT/EFRN/9p/I1wk2b3yVyVNFJvnt4f4Tma2PC0Rl4rVG7r2ZHqc11R42KkDH+ljXdXp92Wx0BkMO5n+ntVqs3Nx+ol9HlPZuq842JkCyMjR/VvXoJvPu1pVG1CaJY83X752I5iX67qVKX5z2drTONlpARo9iAdoecjhCtbn9z0VTwWRntWOA1vqFynaSUNkXi60Xiw9V85KCHWtiFwsOQlFayk56IjtpsW4zFRtWom1JbnrP/DZWQHKYV7VobQ7zvNPZ+/JQ9eeqR2qHvNx2/YASDL6OsN+nV+5EMcVWUJ79ldUpl3upkWJA9ZDTSm0FX6yO3AgQYgQIMQKEGAFCjAAhRoAQ+z9RbuHDb4LeHwAAAABJRU5ErkJggg==" /><!-- --></p>
+<p>Option 2: Custom time points and custom biomass</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">set_init</span>(<span class="fu">c</span>(<span class="at">BM=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">set_noexposure</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">set_transfer</span>(<span class="at">times=</span><span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>), <span class="at">biomass=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">simulate</span>() <span class="ot">-&gt;</span> result2</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">ggplot</span>(result2) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(time, BM)) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Time (days)&quot;</span>, <span class="at">y=</span><span class="st">&quot;Biomass (g_dw/m2)&quot;</span>, <span class="at">title=</span><span class="st">&quot;Biomass transfer at custom time points&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Call the help page of set_transfer</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>?set_transfer</span></code></pre></div>
+</div>
+<div id="fitting-model-parameters" class="section level2">
+<h2>Fitting model parameters</h2>
+<p>Parameters of a model can be fitted (calibrated) against observed
+effect data. To fit a scenario to observed effect data:</p>
+<ol style="list-style-type: decimal">
+<li>Combine the necessary inputs (model, exposure time-series, effect
+data).</li>
+<li>Fit the scenario for the given parameters and observed effect
+data.</li>
+</ol>
+<p>For the first step, two options are available:</p>
+<ul>
+<li><p>When only one exposure level (e.g., one experimental treatment)
+and corresponding effect dataset (effect data only contain observations
+corresponding to one exposure scenario) are of interest, then a scenario
+consisting of model parameters and exposure time-series can directly be
+fitted to effect data using the <code>calibrate()</code>
+function.</p></li>
+<li><p>As a more complex and versatile option, scenarios and effect data
+are combined into one or more <em>calibration sets</em>. Each
+<em>calibration set</em> has exactly one scenario that describes the
+parameters of the experiment. If more than one <em>calibration set</em>
+is defined, scenario parameters can differ between set, but don’t have
+to, A numerical weight can be assigned to each <em>calibration set</em>
+to control its impact on the calculated error term and derived fitting
+procedure. All <em>calibration sets</em> are then passed to the
+<code>calibrate()</code> function.</p></li>
+</ul>
+<p>The following describes an example which fits selected parameters of
+the <em>Lemna</em> model by Schmitt <em>et al.</em> (2013) to observed
+frond numbers from experiments with the herbicide
+<em>metsulfuron</em>:</p>
+<p>Option 1: direct calibration with one scenario and one effect
+dataset</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># No exposure in control scenario</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>exposure <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">14</span>, <span class="at">conc=</span><span class="dv">0</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co"># set k_phot_fix, k_resp and Emax to the defaults recommended in Klein et al. (2022)</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># for Tier 2C studies. Set initial biomass to 12.0 (original data is in fronds</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># rather than biomass, but for sake of simplicity, no conversion was performed).</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>control <span class="ot">&lt;-</span> metsulfuron <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="fu">set_param</span>(<span class="fu">c</span>(<span class="at">k_phot_fix=</span><span class="cn">TRUE</span>, <span class="at">k_resp=</span><span class="dv">0</span>, <span class="at">Emax=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="fu">set_init</span>(<span class="fu">c</span>(<span class="at">BM=</span><span class="dv">12</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  <span class="fu">set_exposure</span>(exposure)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co"># `metsulfuron` is an example scenario based on Schmitt et al. (2013) and therefore</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co"># uses the historical, superseded nomenclature by Schmitt et al. We recommend using</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co"># the newer SETAC Lemna model by Klein et al. (2022) for current applications,</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co"># see `Lemna_SETAC()` for details.</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co"># Get control data from Schmitt et al. (2013)</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>obs_control <span class="ot">&lt;-</span> Schmitt2013 <span class="sc">%&gt;%</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">&quot;T0&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>  <span class="fu">select</span>(t, <span class="at">BM=</span>obs)</span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co"># Fit parameter `k_phot_max` to observed data: `k_phot_max` is a physiological</span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a><span class="co"># parameter which is typically fitted to the control data</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">calibrate</span>(</span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>  <span class="at">x =</span> control,</span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="at">k_phot_max =</span> <span class="dv">1</span>),</span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>  <span class="at">data =</span> obs_control,</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;BM&quot;</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a>  <span class="at">method=</span><span class="st">&quot;Brent&quot;</span>, <span class="co"># Brent is recommended for one-dimensional optimization</span></span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a>  <span class="at">lower=</span><span class="dv">0</span>,        <span class="co"># lower parameter boundary</span></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a>  <span class="at">upper=</span><span class="fl">0.5</span>       <span class="co"># upper parameter boundary</span></span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a>)</span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a><span class="co">#&gt; Calibration based on 1 data set</span></span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a><span class="co">#&gt; Fitted parameter: k_phot_max</span></span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a><span class="co">#&gt; Output variable: BM</span></span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a><span class="co">#&gt; Error function: Sum of squared errors</span></span>
+<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.190983005625053, Error: 7773061.85714245</span></span>
+<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.309016994374947, Error: 3773473.58358374</span></span>
+<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.381966011250105, Error: 32461.9856839336</span></span>
+<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.427050983124842, Error: 5007544.56542049</span></span>
+<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.364216445670702, Error: 595120.560314554</span></span>
+<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.399186938124422, Error: 350369.19391166</span></span>
+<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.384141380642181, Error: 12409.3968167213</span></span>
+<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.385559070535404, Error: 7053.7631866681</span></span>
+<span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.38609772804005, Error: 6707.7364490696</span></span>
+<span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.386028813940768, Error: 6698.77294988308</span></span>
+<span id="cb12-47"><a href="#cb12-47" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.386023722764822, Error: 6698.734259672</span></span>
+<span id="cb12-48"><a href="#cb12-48" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.386023972245524, Error: 6698.73415868153</span></span>
+<span id="cb12-49"><a href="#cb12-49" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.386023961526265, Error: 6698.73415878995</span></span>
+<span id="cb12-50"><a href="#cb12-50" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.386023982964783, Error: 6698.73415895307</span></span>
+<span id="cb12-51"><a href="#cb12-51" tabindex="-1"></a><span class="co">#&gt; Testing: k_phot_max=0.386023972245524, Error: 6698.73415868153</span></span>
+<span id="cb12-52"><a href="#cb12-52" tabindex="-1"></a><span class="co">#&gt; Best fit: k_phot_max=0.386023972245524</span></span>
+<span id="cb12-53"><a href="#cb12-53" tabindex="-1"></a>fit1<span class="sc">$</span>par</span>
+<span id="cb12-54"><a href="#cb12-54" tabindex="-1"></a><span class="co">#&gt; k_phot_max </span></span>
+<span id="cb12-55"><a href="#cb12-55" tabindex="-1"></a><span class="co">#&gt;   0.386024</span></span>
+<span id="cb12-56"><a href="#cb12-56" tabindex="-1"></a></span>
+<span id="cb12-57"><a href="#cb12-57" tabindex="-1"></a><span class="co"># Update the scenario with fitted parameter and simulate it</span></span>
+<span id="cb12-58"><a href="#cb12-58" tabindex="-1"></a>fitted_growth <span class="ot">&lt;-</span> control <span class="sc">%&gt;%</span> </span>
+<span id="cb12-59"><a href="#cb12-59" tabindex="-1"></a>  <span class="fu">set_param</span>(fit1<span class="sc">$</span>par)</span>
+<span id="cb12-60"><a href="#cb12-60" tabindex="-1"></a>sim_mean <span class="ot">&lt;-</span> fitted_growth <span class="sc">%&gt;%</span></span>
+<span id="cb12-61"><a href="#cb12-61" tabindex="-1"></a>  <span class="fu">simulate</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-62"><a href="#cb12-62" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">trial=</span><span class="st">&quot;control&quot;</span>)</span>
+<span id="cb12-63"><a href="#cb12-63" tabindex="-1"></a></span>
+<span id="cb12-64"><a href="#cb12-64" tabindex="-1"></a><span class="co"># Exposure and observations in long format for plotting</span></span>
+<span id="cb12-65"><a href="#cb12-65" tabindex="-1"></a>treatments <span class="ot">&lt;-</span> exposure <span class="sc">%&gt;%</span></span>
+<span id="cb12-66"><a href="#cb12-66" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">trial=</span><span class="st">&quot;control&quot;</span>)</span>
+<span id="cb12-67"><a href="#cb12-67" tabindex="-1"></a>obs_mean <span class="ot">&lt;-</span> obs_control <span class="sc">%&gt;%</span></span>
+<span id="cb12-68"><a href="#cb12-68" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">trial=</span><span class="st">&quot;control&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-69"><a href="#cb12-69" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">time=</span>t, <span class="at">data=</span>BM, trial)</span>
+<span id="cb12-70"><a href="#cb12-70" tabindex="-1"></a></span>
+<span id="cb12-71"><a href="#cb12-71" tabindex="-1"></a><span class="co"># Plot results</span></span>
+<span id="cb12-72"><a href="#cb12-72" tabindex="-1"></a><span class="fu">plot_sd</span>(</span>
+<span id="cb12-73"><a href="#cb12-73" tabindex="-1"></a>  <span class="at">model_base =</span> fitted_growth,</span>
+<span id="cb12-74"><a href="#cb12-74" tabindex="-1"></a>  <span class="at">treatments =</span> treatments,</span>
+<span id="cb12-75"><a href="#cb12-75" tabindex="-1"></a>  <span class="at">rs_mean =</span> sim_mean,</span>
+<span id="cb12-76"><a href="#cb12-76" tabindex="-1"></a>  <span class="at">obs_mean =</span> obs_mean</span>
+<span id="cb12-77"><a href="#cb12-77" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Option 2: Create a list of <em>calibration sets</em> and then fit
+TK/TD model parameters on all datasets and exposure levels at the same
+time:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># get all the trials and exposure series from Schmitt et al. (2013) and create</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co"># a list of calibration sets</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>Schmitt2013 <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="fu">group_map</span>(<span class="cf">function</span>(data, key) {</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>    exp <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">select</span>(t, conc)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    obs <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">select</span>(t, <span class="at">BM=</span>obs)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>    sc <span class="ot">&lt;-</span> fitted_growth <span class="sc">%&gt;%</span> <span class="fu">set_exposure</span>(exp) </span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>    <span class="fu">caliset</span>(sc, obs)</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  }) <span class="ot">-&gt;</span> cs</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co"># Fit parameters on results of all trials at once</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">calibrate</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>  cs,</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>  <span class="at">par=</span><span class="fu">c</span>(<span class="at">EC50=</span><span class="fl">0.3</span>, <span class="at">b=</span><span class="fl">4.16</span>, <span class="at">P_up=</span><span class="fl">0.005</span>),</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>  <span class="at">output=</span><span class="st">&quot;BM&quot;</span>,</span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>  <span class="at">method=</span><span class="st">&quot;L-BFGS-B&quot;</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>  <span class="at">lower=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="dv">0</span>),</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>  <span class="at">upper=</span><span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">10</span>, <span class="fl">0.1</span>),</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>  <span class="at">verbose=</span><span class="cn">FALSE</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>)</span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-67"><a href="#cb13-67" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-68"><a href="#cb13-68" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-69"><a href="#cb13-69" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-78"><a href="#cb13-78" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-79"><a href="#cb13-79" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-80"><a href="#cb13-80" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-81"><a href="#cb13-81" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-82"><a href="#cb13-82" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-83"><a href="#cb13-83" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-84"><a href="#cb13-84" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-85"><a href="#cb13-85" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-86"><a href="#cb13-86" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-87"><a href="#cb13-87" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-88"><a href="#cb13-88" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-89"><a href="#cb13-89" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-90"><a href="#cb13-90" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-91"><a href="#cb13-91" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-92"><a href="#cb13-92" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-93"><a href="#cb13-93" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-94"><a href="#cb13-94" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-95"><a href="#cb13-95" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-96"><a href="#cb13-96" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-97"><a href="#cb13-97" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-98"><a href="#cb13-98" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-99"><a href="#cb13-99" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-100"><a href="#cb13-100" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-101"><a href="#cb13-101" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-102"><a href="#cb13-102" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-103"><a href="#cb13-103" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-104"><a href="#cb13-104" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-105"><a href="#cb13-105" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-106"><a href="#cb13-106" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-107"><a href="#cb13-107" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-108"><a href="#cb13-108" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-109"><a href="#cb13-109" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-110"><a href="#cb13-110" tabindex="-1"></a><span class="co">#&gt; DLSODA-  At T (=R1), too much accuracy requested  </span></span>
+<span id="cb13-111"><a href="#cb13-111" tabindex="-1"></a><span class="co">#&gt;       for precision of machine..  See TOLSF (=R2) </span></span>
+<span id="cb13-112"><a href="#cb13-112" tabindex="-1"></a><span class="co">#&gt; In above message, R1 = 0.003, R2 = nan</span></span>
+<span id="cb13-113"><a href="#cb13-113" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-114"><a href="#cb13-114" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Excessive precision requested.</span></span>
+<span id="cb13-115"><a href="#cb13-115" tabindex="-1"></a><span class="co">#&gt; scale up `rtol&#39; and `atol&#39; e.g by the factor 10</span></span>
+<span id="cb13-116"><a href="#cb13-116" tabindex="-1"></a><span class="co">#&gt; Warning in lsoda(y, times, func, parms, ...): Returning early. Results are</span></span>
+<span id="cb13-117"><a href="#cb13-117" tabindex="-1"></a><span class="co">#&gt; accurate, as far as they go</span></span>
+<span id="cb13-118"><a href="#cb13-118" tabindex="-1"></a>fit2<span class="sc">$</span>par</span>
+<span id="cb13-119"><a href="#cb13-119" tabindex="-1"></a><span class="co">#&gt;       EC50          b       P_up </span></span>
+<span id="cb13-120"><a href="#cb13-120" tabindex="-1"></a><span class="co">#&gt; 0.52090177 4.69630443 0.01708181</span></span>
+<span id="cb13-121"><a href="#cb13-121" tabindex="-1"></a></span>
+<span id="cb13-122"><a href="#cb13-122" tabindex="-1"></a><span class="co"># Update the scenario with fitted parameter and simulate all trials</span></span>
+<span id="cb13-123"><a href="#cb13-123" tabindex="-1"></a>fitted_tktd <span class="ot">&lt;-</span> fitted_growth <span class="sc">%&gt;%</span></span>
+<span id="cb13-124"><a href="#cb13-124" tabindex="-1"></a>  <span class="fu">set_param</span>(fit2<span class="sc">$</span>par)</span>
+<span id="cb13-125"><a href="#cb13-125" tabindex="-1"></a></span>
+<span id="cb13-126"><a href="#cb13-126" tabindex="-1"></a>treatments <span class="ot">&lt;-</span> Schmitt2013 <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="at">time=</span>t, conc, <span class="at">trial=</span>ID)</span>
+<span id="cb13-127"><a href="#cb13-127" tabindex="-1"></a>rs_mean <span class="ot">&lt;-</span> fitted_tktd <span class="sc">%&gt;%</span></span>
+<span id="cb13-128"><a href="#cb13-128" tabindex="-1"></a>  <span class="fu">batch</span>(treatments) <span class="sc">%&gt;%</span></span>
+<span id="cb13-129"><a href="#cb13-129" tabindex="-1"></a>  <span class="fu">simulate</span>()</span>
+<span id="cb13-130"><a href="#cb13-130" tabindex="-1"></a></span>
+<span id="cb13-131"><a href="#cb13-131" tabindex="-1"></a><span class="co"># Observations in long format for plotting</span></span>
+<span id="cb13-132"><a href="#cb13-132" tabindex="-1"></a>obs_mean <span class="ot">&lt;-</span> Schmitt2013 <span class="sc">%&gt;%</span></span>
+<span id="cb13-133"><a href="#cb13-133" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">time=</span>t, <span class="at">data=</span>obs, <span class="at">trial=</span>ID)</span>
+<span id="cb13-134"><a href="#cb13-134" tabindex="-1"></a></span>
+<span id="cb13-135"><a href="#cb13-135" tabindex="-1"></a><span class="co"># Plot results</span></span>
+<span id="cb13-136"><a href="#cb13-136" tabindex="-1"></a><span class="fu">plot_sd</span>(</span>
+<span id="cb13-137"><a href="#cb13-137" tabindex="-1"></a>  <span class="at">model_base =</span> fitted_tktd,</span>
+<span id="cb13-138"><a href="#cb13-138" tabindex="-1"></a>  <span class="at">treatments =</span> treatments,</span>
+<span id="cb13-139"><a href="#cb13-139" tabindex="-1"></a>  <span class="at">rs_mean =</span> rs_mean,</span>
+<span id="cb13-140"><a href="#cb13-140" tabindex="-1"></a>  <span class="at">obs_mean =</span> obs_mean</span>
+<span id="cb13-141"><a href="#cb13-141" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The resulting scenario with fitted parameters shows a very good fit
+with the observed effects from experiments.</p>
+<p>After model parameters have been calibrated during model fitting
+against observational data, the parameter estimates obtained can be
+further evaluated by assessing the 95% confidence intervals for each
+parameter through likelihood profiling.</p>
+<p>First, the profiling is conducted using the
+<code>lik_profile()</code> function. Then, the profiles can be
+visualized using <code>plot_lik_profile()</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># using the calibration set and calibrated parameters from the previous Lemna </span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># Schmitt example, a likelihood profiling is done</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># We set parameter boundaries to constrain the likelihood profiling within these </span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># boundaries (this is optional)</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co"># conduct profiling</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">lik_profile</span>(<span class="at">x =</span> cs, <span class="co"># the calibration set</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>                   <span class="at">par =</span> fit2<span class="sc">$</span>par, <span class="co"># the parameter values after calibration</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>                   <span class="at">output =</span> <span class="st">&quot;BM&quot;</span>, <span class="co"># the observational output against which to </span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>                                  <span class="co"># compare the model fit</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>                   <span class="at">bounds =</span> <span class="fu">list</span>(<span class="at">EC50_int =</span> <span class="fu">list</span>(<span class="fl">0.1</span>, <span class="dv">4</span>), </span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>                                 <span class="at">b =</span> <span class="fu">list</span>(<span class="dv">1</span>, <span class="dv">5</span>),</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>                                 <span class="at">P =</span> <span class="fu">list</span>(<span class="fl">0.0001</span>, <span class="fl">0.2</span>)))</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; Profiling: EC50</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; start param value: 0.521LL:-237.245</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; hit 95% Conf Region, changing direction</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; hit 95% Conf Region, end of profiling</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; Profiling: b</span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt; start param value: 4.696LL:-237.245</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt; hit 95% Conf Region, changing direction</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt; Profiling: P_up</span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt; start param value: 0.017LL:-237.245</span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt; hit 95% Conf Region, changing direction</span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt; hit 95% Conf Region, end of profiling</span></span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co"># visualise profiling results</span></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="fu">plot_lik_profile</span>(res)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co"># access 95% confidence intervals of profiled parameters</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>res<span class="sc">$</span>EC50<span class="sc">$</span>confidence_interval</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5145915 0.5272611</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>res<span class="sc">$</span>b<span class="sc">$</span>confidence_interval</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; [1] 4.383194 5.000000</span></span></code></pre></div>
+<p>Finally, relations between estimates of the calibrated parameters can
+be visualized using a parameter space explorer. This supports
+identifying potential parameter correlations and identifiability
+issues.</p>
+<p>The parameter space explorer draws random parameter sets from the 95%
+confidence intervals obtained for each parameter during likelihood
+profiling, and evaluates the fit (likelihood) of each of these parameter
+sets by comparing the model with the original parameter set against the
+model with the new, randomly draw set.</p>
+<p>First, the parameter space exploration is conducted using the
+<code>explore_space()</code> function. Then, the space can be visualized
+using <code>plot_lik_profile()</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Call the help page for more information about the parameter space explorer</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>?explore_space</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co"># conduct space exploration</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>res_space <span class="ot">&lt;-</span> <span class="fu">explore_space</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="at">x =</span> cs,</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="at">par =</span> fit2<span class="sc">$</span>par,</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="at">res =</span> res, <span class="co"># output of the likelihood profiling function</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;BM&quot;</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; resampling parameter space, iteration: 1</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt; better optimum found in space explorer</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co"># visualize the parameter space</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="fu">plot_param_space</span>(res_space)</span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt; Registered S3 method overwritten by &#39;GGally&#39;:</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt;   method from   </span></span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt;   +.gg   ggplot2</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="changes-in-parameter-values-over-time" class="section level2">
+<h2>Changes in parameter values over time</h2>
+<p>Sequences can be used to represent changing conditions over time,
+such as a change in model parameters which would otherwise be constant.
+This can be used to represent events such as a pump failure or change in
+temperature.</p>
+<p>The function <code>sequence()</code> creates an object which
+represents a sequence of several scenarios. The sequence is treated as a
+single scenario and each scenario is simulated one after the other.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># A base scenario is created for the whole period, but parameters are only</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co"># valid until day 7</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>sc1 <span class="ot">&lt;-</span> metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">14</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co"># A parameter change occurs at day 7: k_loss increases from 0 to 0.1 d-1</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>sc2 <span class="ot">&lt;-</span> sc1 <span class="sc">%&gt;%</span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>  <span class="fu">set_param</span>(<span class="fu">c</span>(<span class="at">k_loss=</span><span class="fl">0.1</span>))</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co"># Combine both scenarios to a sequence with a break at *t = 7*:</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co"># scenario `sc1` will be simulated for *t = [0, 7]*, and</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co"># scenario `sc2` will be simulated for *t = [7, 14]*.</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>sq <span class="ot">&lt;-</span> <span class="fu">sequence</span>(<span class="fu">list</span>(sc1, sc2), <span class="at">breaks=</span><span class="dv">7</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; Modifying sequence to consider breaks ...</span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt;   Scenario #1: simulated period [0, 7]</span></span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt;   Scenario #2: simulated period [7, 14]</span></span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="fu">simulate</span>(sq)</span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="co">#&gt;    time       BM E      M_int      C_int  FrondNo</span></span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="co">#&gt; 1     0 50.00000 1   0.000000 0.00000000 500000.0</span></span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="co">#&gt; 2     1 52.15860 1 223.074635 0.25609895 521586.0</span></span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; 3     2 52.43488 1 369.634276 0.42211960 524348.8</span></span>
+<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a><span class="co">#&gt; 4     3 52.33910 1 463.025680 0.52973949 523391.0</span></span>
+<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a><span class="co">#&gt; 5     4 52.17916 1 521.892161 0.59891777 521791.6</span></span>
+<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a><span class="co">#&gt; 6     5 52.00010 1 558.626187 0.64328091 520001.0</span></span>
+<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a><span class="co">#&gt; 7     6 51.81396 1 581.216718 0.67169918 518139.6</span></span>
+<span id="cb18-26"><a href="#cb18-26" tabindex="-1"></a><span class="co">#&gt; 8     7 51.63733 1 474.070752 0.54974702 516373.3</span></span>
+<span id="cb18-27"><a href="#cb18-27" tabindex="-1"></a><span class="co">#&gt; 9     8 46.72564 1 273.120886 0.35001217 467256.4</span></span>
+<span id="cb18-28"><a href="#cb18-28" tabindex="-1"></a><span class="co">#&gt; 10    9 42.94595 1 157.349663 0.21939521 429459.5</span></span>
+<span id="cb18-29"><a href="#cb18-29" tabindex="-1"></a><span class="co">#&gt; 11   10 40.59753 1  90.651859 0.13370900 405975.3</span></span>
+<span id="cb18-30"><a href="#cb18-30" tabindex="-1"></a><span class="co">#&gt; 12   11 38.94556 1  52.226102 0.08029957 389455.6</span></span>
+<span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a><span class="co">#&gt; 13   12 37.48888 1  30.088360 0.04805953 374888.8</span></span>
+<span id="cb18-32"><a href="#cb18-32" tabindex="-1"></a><span class="co">#&gt; 14   13 36.12868 1  17.334424 0.02873035 361286.8</span></span>
+<span id="cb18-33"><a href="#cb18-33" tabindex="-1"></a><span class="co">#&gt; 15   14 34.84672 1   9.986661 0.01716098 348467.2</span></span></code></pre></div>
+<p>For more information:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># Call the help page of `sequence`</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>?sequence</span></code></pre></div>
+</div>
+<div id="decrease-assessment-runtime" class="section level2">
+<h2>Decrease assessment runtime</h2>
+<p>There are multiple ways to decrease the runtime of a simulation. One
+option is to increase the maximum step length of the solver,
+<code>hmax</code>. It is an optional argument which can be passed to
+either <code>simulate()</code>, <code>effect()</code>, or
+<code>epx()</code>. The larger <code>hmax</code>, the faster the
+simulation generally completes. However, be careful: The larger
+<code>hmax</code>, the greater the risk that simulation results will be
+inaccurate and simulations may even fail due to numerical issues.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># Simulations with a maximum solver step length of hmax=0.01</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">set_times</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">simulate</span>(<span class="at">hmax=</span><span class="fl">0.1</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt;   time       BM E    M_int     C_int  FrondNo</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&gt; 1    0 50.00000 1   0.0000 0.0000000 500000.0</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt; 2    1 52.15860 1 223.0746 0.2560990 521586.0</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="co">#&gt; 3    2 52.43488 1 369.6343 0.4221196 524348.8</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt; 4    3 52.33910 1 463.0257 0.5297395 523391.0</span></span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#&gt; 5    4 52.17916 1 521.8922 0.5989178 521791.6</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co">#&gt; 6    5 52.00010 1 558.6262 0.6432809 520001.0</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="co">#&gt; 7    6 51.81396 1 581.2167 0.6716992 518139.6</span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="co">#&gt; 8    7 51.63733 1 474.0708 0.5497470 516373.3</span></span></code></pre></div>
+<p>The calculation of <em>EPx</em> values may take a lot of time if one
+or more of the following conditions apply:</p>
+<ol style="list-style-type: decimal">
+<li>a large number of scenarios is assessed</li>
+<li>the simulated exposure time-series are very long</li>
+<li>moving exposure windows are considered which are very small in
+comparison to the length of the exposure series</li>
+</ol>
+<p>The <code>epx()</code> function is implemented in a way that it can
+parallelize calculations by using more than one CPU. To enable parallel
+processing, a command like the following needs to preceed the call to
+<code>epx()</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession)</span></code></pre></div>
+<p>If the computer running the calculation has <code>n</code> physical
+CPU cores, then the time necessary to calculate <em>EPx</em> values will
+(in the best case) decrease by the same factor. For more information on
+how to make use of parallelization in R, please refer to the
+<code>future</code> package:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">&quot;future-1-overview&quot;</span>, <span class="at">package=</span><span class="st">&quot;future&quot;</span>)</span></code></pre></div>
+</div>
+<div id="implementing-custom-models" class="section level2">
+<h2>Implementing custom models</h2>
+<p>The set of supported models can be extended by users as needed.
+Experimental or one-time use models can be implemented in a user’s
+script and inserted into the package’s workflow.</p>
+<p>The starting point to add a new model is an implementation of the
+model’s rules and dynamics in <em>R</em> code. In most cases, this will
+be a code snippet which describes the model’s Ordinary Differential
+Equations (ODE):</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="do">## An exemplary implementation of the GUTS-RED-SD TKTD model ##</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co"># Model ODEs following the deSolve specification</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>sd_ode <span class="ot">&lt;-</span> <span class="cf">function</span>(t, state, params) {</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">as.list</span>(<span class="fu">c</span>(state, params)), {</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>    dDw <span class="ot">&lt;-</span> kd <span class="sc">*</span> (<span class="fu">Cw</span>(t) <span class="sc">-</span> Dw)            <span class="co"># dDw/dt, scaled damage</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>    dH <span class="ot">&lt;-</span> kk <span class="sc">*</span> <span class="fu">max</span>(<span class="dv">0</span>, Dw <span class="sc">-</span> z)           <span class="co"># dH/dt, cumulative hazard</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>    </span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>    <span class="fu">list</span>(<span class="fu">c</span>(dDw, dH))                    <span class="co"># return derivatives</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>  })</span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>}</span></code></pre></div>
+<p>The previous example implements the model equations in a way that can
+be processed by the <code>deSolve</code> package for numerical
+integration. For a detailed description on how to use
+<code>deSolve</code>, please refer to its vignette:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">&quot;deSolve&quot;</span>, <span class="at">package=</span><span class="st">&quot;deSolve&quot;</span>)</span></code></pre></div>
+<p>With some additional scenario data such as initial state, output time
+points, and model parameters, we are able to simulate our custom TKTD
+model:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="do">## Properties of a sample scenario ##</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Dw=</span><span class="dv">0</span>, <span class="at">H=</span><span class="dv">0</span>)                         <span class="co"># initial state</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>                                 <span class="co"># output time points [0,5]</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">kd=</span><span class="dv">22</span>, <span class="at">hb=</span><span class="fl">0.01</span>, <span class="at">z=</span><span class="fl">0.5</span>, <span class="at">kk=</span><span class="fl">0.08</span>)   <span class="co"># model parameters</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>exp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>,                  <span class="co"># exposure time-series</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>                  <span class="at">conc=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="fl">0.5</span>,<span class="fl">0.6</span>,<span class="fl">0.2</span>))</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="co"># Create a linear interpolation of the exposure time-series</span></span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>expf <span class="ot">&lt;-</span> <span class="fu">approxfun</span>(<span class="at">x=</span>exp<span class="sc">$</span>time, <span class="at">y=</span>exp<span class="sc">$</span>conc, <span class="at">method=</span><span class="st">&quot;linear&quot;</span>, <span class="at">rule=</span><span class="dv">2</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a><span class="co"># Extend parameter set by interpolated exposure series</span></span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>paramx <span class="ot">&lt;-</span> <span class="fu">as.list</span>(<span class="fu">c</span>(param, <span class="at">Cw=</span>expf))</span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a><span class="co"># Numerically solve the ODE</span></span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a>deSolve<span class="sc">::</span><span class="fu">ode</span>(<span class="at">y=</span>init, <span class="at">times=</span>times, <span class="at">parms=</span>paramx, <span class="at">func=</span>sd_ode)</span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a><span class="co">#&gt;   time        Dw           H</span></span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a><span class="co">#&gt; 1    0 0.0000000 0.000000000</span></span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a><span class="co">#&gt; 2    1 0.9545447 0.008266888</span></span>
+<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a><span class="co">#&gt; 3    2 0.9999995 0.048101596</span></span>
+<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a><span class="co">#&gt; 4    3 0.5227279 0.069837063</span></span>
+<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a><span class="co">#&gt; 5    4 0.5954544 0.073573877</span></span>
+<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a><span class="co">#&gt; 6    5 0.2181819 0.074888021</span></span></code></pre></div>
+<p>When we have made sure that our custom model can be simulated and
+works as expected, we can continue with integrating it into the
+package’s workflow. First, we will define a new scenario class that
+identifies our custom model by a unique name. Next, we have to tell the
+package how the models of this class can be simulated. In a final step,
+we may have to describe how effects are calculated for these models.</p>
+<p>We start by defining a new scenario class that derives from a
+suitable ancestor. In general, we can inherit from the base class
+<code>EffectScenario</code> which provides the general scenario
+capabilities. However, if the custom model is just a variant of an
+existing model category, then it will be easier to derive from
+specialized scenario class that already provides certain features such
+as effect calculation. The following class tree gives an overview of the
+scenario classes in use:</p>
+<pre><code>EffectScenario
+|    
+|   Transferable
+|___|__ Lemna
+|   |   |__ LemnaSchmitt
+|   |   |__ LemnaSetac
+|   |
+|   |__ Myriophyllum
+|   |   |__ MyrioExp
+|   |   |__ MyrioLog
+|   |
+|   |__ Algae
+|       |__ AlgaeWeber
+|       |__ AlgaeTKTD
+|       |__ AlgaeSimple 
+|
+|__ GutsRedSd
+|__ GutsRedIt
+|
+|__ Deb
+    |__ DebAbj
+    |__ DebTox</code></pre>
+<p>To give an example, to implement a variant of a <em>Lemna</em> model,
+it would be advisable to derive from the class <code>Lemna</code> to
+benefit from already implemented features such as effect endpoint
+calculation and simulation of biomass transfers. For the custom
+GUTS-RED-SD model, the ideal choice would be to derive from
+<code>GutsRedSd</code> to minimize the implementation overhead. However,
+we will derive from the general <code>EffectScenario</code> class for
+the sake of our example and create a scenario object:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="do">## Integrate a new model class into the package workflow ##</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="co"># Create a unique class that derives from &#39;EffectScenario&#39;</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">setClass</span>(<span class="st">&quot;MyGuts&quot;</span>, <span class="at">contains=</span><span class="st">&quot;EffectScenario&quot;</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="co"># Create an object of the new class and assign scenario properties</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="fu">new</span>(<span class="st">&quot;MyGuts&quot;</span>, <span class="at">name=</span><span class="st">&quot;My custom model&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>  <span class="fu">set_init</span>(init) <span class="sc">%&gt;%</span></span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>  <span class="fu">set_times</span>(times) <span class="sc">%&gt;%</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>  <span class="fu">set_param</span>(param) <span class="sc">%&gt;%</span></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a>  <span class="fu">set_exposure</span>(exp, <span class="at">reset_times=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a>  <span class="fu">set_endpoints</span>(<span class="st">&quot;L&quot;</span>) <span class="ot">-&gt;</span> myscenario</span>
+<span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a>myscenario</span>
+<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a><span class="co">#&gt; &#39;My custom model&#39; scenario</span></span>
+<span id="cb27-15"><a href="#cb27-15" tabindex="-1"></a><span class="co">#&gt; param: kd=22, hb=0.01, z=0.5, kk=0.08</span></span>
+<span id="cb27-16"><a href="#cb27-16" tabindex="-1"></a><span class="co">#&gt; init : Dw=0, H=0</span></span>
+<span id="cb27-17"><a href="#cb27-17" tabindex="-1"></a><span class="co">#&gt; endpt: L</span></span>
+<span id="cb27-18"><a href="#cb27-18" tabindex="-1"></a><span class="co">#&gt; times: [0,5] n=6, regular</span></span>
+<span id="cb27-19"><a href="#cb27-19" tabindex="-1"></a><span class="co">#&gt; forcs: none</span></span>
+<span id="cb27-20"><a href="#cb27-20" tabindex="-1"></a><span class="co">#&gt; expsr:</span></span>
+<span id="cb27-21"><a href="#cb27-21" tabindex="-1"></a><span class="co">#&gt;   time conc</span></span>
+<span id="cb27-22"><a href="#cb27-22" tabindex="-1"></a><span class="co">#&gt; 1    0  0.0</span></span>
+<span id="cb27-23"><a href="#cb27-23" tabindex="-1"></a><span class="co">#&gt; 2    1  1.0</span></span>
+<span id="cb27-24"><a href="#cb27-24" tabindex="-1"></a><span class="co">#&gt; 3    2  1.0</span></span>
+<span id="cb27-25"><a href="#cb27-25" tabindex="-1"></a><span class="co">#&gt; 4    3  0.5</span></span>
+<span id="cb27-26"><a href="#cb27-26" tabindex="-1"></a><span class="co">#&gt; 5    4  0.6</span></span>
+<span id="cb27-27"><a href="#cb27-27" tabindex="-1"></a><span class="co">#&gt; 6    5  0.2</span></span></code></pre></div>
+<p>The object <code>myscenario</code> now carries all the settings and
+data which we also used for our test simulation. In the next step, the
+<code>solver()</code> function will be overloaded to handle objects of
+the newly defined scenario class <code>MyGuts</code>. The adapted
+<code>solver()</code> function will collect the properties of a given
+scenario object, call the ODE solver, and return simulation results:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># the actual function calling deSolve can have a different signature</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>solver_myguts <span class="ot">&lt;-</span> <span class="cf">function</span>(scenario, ...) {</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>  <span class="co"># get relevant data from scenario</span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>  init <span class="ot">&lt;-</span> scenario<span class="sc">@</span>init</span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>  param <span class="ot">&lt;-</span> scenario<span class="sc">@</span>param</span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>  times <span class="ot">&lt;-</span> scenario<span class="sc">@</span>times</span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a>  exp <span class="ot">&lt;-</span> scenario<span class="sc">@</span>exposure<span class="sc">@</span>series</span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(exp) <span class="sc">==</span> <span class="dv">1</span>) { <span class="co"># extend exposure series to have at least two rows</span></span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>    row2 <span class="ot">&lt;-</span> exp[<span class="dv">1</span>,]</span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>    row2[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> row2[[<span class="dv">1</span>]]<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a>    exp <span class="ot">&lt;-</span> <span class="fu">rbind</span>(exp, row2)</span>
+<span id="cb28-12"><a href="#cb28-12" tabindex="-1"></a>  }</span>
+<span id="cb28-13"><a href="#cb28-13" tabindex="-1"></a>  </span>
+<span id="cb28-14"><a href="#cb28-14" tabindex="-1"></a>  <span class="co"># Create a linear interpolation of the exposure time-series</span></span>
+<span id="cb28-15"><a href="#cb28-15" tabindex="-1"></a>  expf <span class="ot">&lt;-</span> <span class="fu">approxfun</span>(<span class="at">x=</span>exp[,<span class="dv">1</span>], <span class="at">y=</span>exp[,<span class="dv">2</span>], <span class="at">method=</span><span class="st">&quot;linear&quot;</span>, <span class="at">rule=</span><span class="dv">2</span>)</span>
+<span id="cb28-16"><a href="#cb28-16" tabindex="-1"></a>  <span class="co"># Extend parameter set by interpolated exposure series</span></span>
+<span id="cb28-17"><a href="#cb28-17" tabindex="-1"></a>  paramx <span class="ot">&lt;-</span> <span class="fu">as.list</span>(<span class="fu">c</span>(param, <span class="at">Cw=</span>expf))</span>
+<span id="cb28-18"><a href="#cb28-18" tabindex="-1"></a>  </span>
+<span id="cb28-19"><a href="#cb28-19" tabindex="-1"></a>  <span class="co"># pass everything to ODE solver for numerical integration</span></span>
+<span id="cb28-20"><a href="#cb28-20" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(deSolve<span class="sc">::</span><span class="fu">ode</span>(<span class="at">y=</span>init, <span class="at">times=</span>times, <span class="at">parms=</span>paramx, <span class="at">func=</span>sd_ode, ...))</span>
+<span id="cb28-21"><a href="#cb28-21" tabindex="-1"></a>}</span>
+<span id="cb28-22"><a href="#cb28-22" tabindex="-1"></a></span>
+<span id="cb28-23"><a href="#cb28-23" tabindex="-1"></a><span class="do">## Overload the solver() function ##</span></span>
+<span id="cb28-24"><a href="#cb28-24" tabindex="-1"></a><span class="co"># The functions signature, i.e. the number and names of its arguments, must stay as is</span></span>
+<span id="cb28-25"><a href="#cb28-25" tabindex="-1"></a><span class="fu">setMethod</span>(<span class="st">&quot;solver&quot;</span>, <span class="st">&quot;MyGuts&quot;</span>, <span class="cf">function</span>(scenario, ...) <span class="fu">solver_myguts</span>(scenario, ...))</span></code></pre></div>
+<p>Overloading an <em>S4</em> function is done using
+<code>setMethod()</code>. The first argument to <code>setMethod()</code>
+identifies which function we want to overload, in this case it is
+<code>solver</code>. The second argument, <code>MyGuts</code>, defines
+which object type our overloaded function will accept. In this case, we
+want to provide an implementation to simulate <code>MyGuts</code>
+scenarios. <em>R</em> will decide during runtime which of the function
+candidates to execute when <code>solver()</code> is called based on the
+type of the first argument to <code>solver()</code>. The third argument,
+<code>function(object, ...) solver_myguts(scenario=object, ...)</code>
+forwards calls to an appropriate function which can handle
+<code>MyGuts</code> objects. The function signature
+<code>function(object, ...)</code> must stay exactly as it is and must
+not be modified.</p>
+<p>The code within the body of <code>solver_myguts()</code> is almost
+identical to the original code used to simulate the prototyped model. We
+have to deal with one corner case, though: some exposure time-series
+will contain only a single row, representing constant exposure over
+time, but this would raise an error in <code>approxfun()</code>. In
+order to avoid this error, we will duplicate the first row and append it
+to the series. Technically, this issue should be handled in the
+prototyped code as well but was left out for reasons of brevity.</p>
+<p>The parameterized scenario object <code>myscenario</code> of class
+<code>MyGuts</code> can be passed to the overloaded
+<code>simulate()</code> function:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>myscenario <span class="sc">%&gt;%</span> <span class="fu">simulate</span>()</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="co">#&gt;   time        Dw           H</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="co">#&gt; 1    0 0.0000000 0.000000000</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co">#&gt; 2    1 0.9545447 0.008266888</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="co">#&gt; 3    2 0.9999995 0.048101596</span></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a><span class="co">#&gt; 4    3 0.5227279 0.069837063</span></span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a><span class="co">#&gt; 5    4 0.5954544 0.073573877</span></span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a><span class="co">#&gt; 6    5 0.2181819 0.074888021</span></span></code></pre></div>
+<p>The custom model can now be simulated using the framework but it is
+still missing effect endpoints. If, on the other hand, we had decided to
+inherit our scenario class from a suitable ancestor, such as
+<code>GutsRedSd</code>, we could have stopped at this point as the
+ancestor would provide routines to calculate effects.</p>
+<p>By default, any state variable is available as an effect endpoint and
+the calculated effect would reflect the change in the state variables’
+value at the end of the simulation. However, we need to calculate the
+<em>survival</em> endpoint in a different manner for GUTS-RED type
+models. To implement this specialized endpoint, we need to overload the
+function <code>fx()</code> which calculates effect endpoints:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="do">## Overload effect endpoint calculation ##</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="co"># fx() is called by effect()</span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="fu">setMethod</span>(<span class="st">&quot;fx&quot;</span>, <span class="st">&quot;MyGuts&quot;</span>, <span class="cf">function</span>(scenario, ...) <span class="fu">fx_myguts</span>(scenario, ...))</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="co"># @param scenario Scenario object to assess</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="co"># @param window Start &amp; end time of the moving exposure window</span></span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a><span class="co"># @param ... any additional parameters</span></span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>fx_myguts <span class="ot">&lt;-</span> <span class="cf">function</span>(scenario, window, ...) {</span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>  <span class="co"># simulate the scenario (it is already clipped to the moving exposure window)</span></span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">simulate</span>(scenario, ...)</span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a>  <span class="co"># only use model state at the end of the simulation</span></span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">tail</span>(out, <span class="dv">1</span>)</span>
+<span id="cb30-13"><a href="#cb30-13" tabindex="-1"></a>  <span class="co"># calculate survival according to EFSA Scientific Opinion on TKTD models</span></span>
+<span id="cb30-14"><a href="#cb30-14" tabindex="-1"></a>  <span class="co"># p. 33, doi:10.2903/j.efsa.2018.5377</span></span>
+<span id="cb30-15"><a href="#cb30-15" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">unname</span>(window[<span class="dv">2</span>] <span class="sc">-</span> window[<span class="dv">1</span>])</span>
+<span id="cb30-16"><a href="#cb30-16" tabindex="-1"></a>  survival <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>out<span class="sc">$</span>H) <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>scenario<span class="sc">@</span>param<span class="sc">$</span>hb <span class="sc">*</span> t)</span>
+<span id="cb30-17"><a href="#cb30-17" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(<span class="st">&quot;L&quot;</span><span class="ot">=</span>survival))</span>
+<span id="cb30-18"><a href="#cb30-18" tabindex="-1"></a>}</span>
+<span id="cb30-19"><a href="#cb30-19" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" tabindex="-1"></a><span class="co"># Derive effect levels for our sample scenario</span></span>
+<span id="cb30-21"><a href="#cb30-21" tabindex="-1"></a>myscenario <span class="sc">%&gt;%</span> <span class="fu">effect</span>()</span>
+<span id="cb30-22"><a href="#cb30-22" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span id="cb30-23"><a href="#cb30-23" tabindex="-1"></a><span class="co">#&gt;   scenario      L L.dat.start L.dat.end</span></span>
+<span id="cb30-24"><a href="#cb30-24" tabindex="-1"></a><span class="co">#&gt;   &lt;list&gt;    &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb30-25"><a href="#cb30-25" tabindex="-1"></a><span class="co">#&gt; 1 &lt;MyGuts&gt; 0.0722           0         5</span></span></code></pre></div>
+<p><code>fx()</code> is used by <code>effect()</code> to derive effect
+endpoints for each model. By convention, any overload of the
+<code>fx()</code> function must return a named numerical vector
+containing the effect endpoints for the provided scenario and moving
+exposure window. The scenario will already be parameterized to only
+simulate the current exposure window. The return value of
+<code>fx()</code> will then be used to calculate effect levels. In case
+of models requiring a control scenario, the effect level will be
+calculated as <code>1 - effect/control</code>. For models not requiring
+a control, the overloaded <code>fx()</code> must return the final effect
+level, i.e. a value from the interval <code>[0,1]</code> (0% to 100%
+effect).</p>
+</div>
+<div id="complete-working-example" class="section level2">
+<h2>Complete working example</h2>
+<p>In this section, a complete example is given to make predictions and
+evaluate toxic effects using a calibrated model, as might be conducted
+in a risk assessment context. Specifically, the <em>Lemna</em> model
+will be set up to match the study of Schmitt et al. (2003, doi:
+10.1016/j.ecolmodel.2013.01.017) who exposed <em>Lemna</em> to
+metsulfuron-methyl.</p>
+<p>The model will be parameterized with the values as described in the
+study. Then, the model will be inspected and used to make predictions
+for exposure scenarios, plot results, and get EPx calculations.</p>
+<div id="setting-up-a-scenario" class="section level3">
+<h3>Setting up a scenario</h3>
+<p>Setting up the model (i.e. creating a scenario) involves defining the
+parameters, the environmental variables (external forcings and chemical
+exposure), and the initial conditions. Further, a tag can be assigned to
+easily identify the scenario by name. Also, for primary producer models,
+a transfer of biomass can be defined to match the experimental design of
+the study.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="do">## Get all model parameters</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co"># Lemna model parameters taken from file &#39;mm2.r&#39; included</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="co"># in supporting material of Schmitt et al. (2013)</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>param_study <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  <span class="co">#     - Effect -</span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a>  <span class="at">Emax     =</span> <span class="fl">0.784</span>,   <span class="co"># [same as conc. data]  maximum effect concentration</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>  <span class="at">EC50     =</span> <span class="fl">0.3</span>,     <span class="co"># [same as conc. data]  Midpoint of effect curve</span></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>  <span class="at">b        =</span> <span class="fl">4.16</span>,    <span class="co"># [-]  Slope of effect curve</span></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>  <span class="co">#     - Toxicokinetics -</span></span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>  <span class="at">P_up     =</span> <span class="fl">0.0054</span>,  <span class="co"># [cm/d]  Permeability for uptake</span></span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a>  <span class="at">AperBM   =</span> <span class="dv">1000</span>,    <span class="co"># [cm^2/g_dw]  Frond area/dry weight</span></span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a>  <span class="at">Kbm      =</span> <span class="fl">0.75</span>,    <span class="co"># []  Biomass(fw)-water partition coefficient</span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a>  <span class="at">P_Temp   =</span> F,       <span class="co"># Switch for temperature dependence of cuticle permeability</span></span>
+<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a>  <span class="at">MolWeight =</span> <span class="dv">381</span>,    <span class="co"># [g/mol] Molmass of molecule (determines Q10_permeability)</span></span>
+<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a>  <span class="co">#     - Fate of biomass -</span></span>
+<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a>  <span class="at">k_phot_fix  =</span> F,    <span class="co"># If True k_G_max is not changed by environmental factors</span></span>
+<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a>  <span class="at">k_phot_max  =</span> <span class="fl">0.47</span>, <span class="co"># [1/d]  Maximum photosynthesis rate</span></span>
+<span id="cb31-18"><a href="#cb31-18" tabindex="-1"></a>  <span class="at">k_resp   =</span> <span class="fl">0.05</span>,    <span class="co"># [1/d]  Respiration rate at ref. temperature</span></span>
+<span id="cb31-19"><a href="#cb31-19" tabindex="-1"></a>  <span class="at">k_loss   =</span> <span class="fl">0.0</span>,     <span class="co"># [1/d]  Some rate of loss (e.g. Flow rate)</span></span>
+<span id="cb31-20"><a href="#cb31-20" tabindex="-1"></a>  <span class="co">#     - Temperature dependence -</span></span>
+<span id="cb31-21"><a href="#cb31-21" tabindex="-1"></a>  <span class="at">Tmin     =</span> <span class="fl">8.0</span>  ,   <span class="co"># [°C]  Minimum growth temperature </span></span>
+<span id="cb31-22"><a href="#cb31-22" tabindex="-1"></a>  <span class="at">Tmax     =</span> <span class="fl">40.5</span> ,   <span class="co"># [°C]  Maximum growth temperature</span></span>
+<span id="cb31-23"><a href="#cb31-23" tabindex="-1"></a>  <span class="at">Topt     =</span> <span class="fl">26.7</span> ,   <span class="co"># [°C]  Optimum growth temperature </span></span>
+<span id="cb31-24"><a href="#cb31-24" tabindex="-1"></a>  <span class="at">t_ref    =</span> <span class="dv">25</span>,      <span class="co"># [°C]  Reference temperature for respiration rate</span></span>
+<span id="cb31-25"><a href="#cb31-25" tabindex="-1"></a>  <span class="at">Q10      =</span> <span class="dv">2</span>,       <span class="co"># [-]   Temperature dependent factor for respiration rate</span></span>
+<span id="cb31-26"><a href="#cb31-26" tabindex="-1"></a>  <span class="co">#     - Light dependence (Linear) -</span></span>
+<span id="cb31-27"><a href="#cb31-27" tabindex="-1"></a>  <span class="at">k_0      =</span> <span class="dv">3</span> ,      <span class="co"># [1/d]  Intercept of linear part</span></span>
+<span id="cb31-28"><a href="#cb31-28" tabindex="-1"></a>  <span class="at">a_k      =</span> <span class="fl">5E-5</span> ,   <span class="co"># [(1/d)/(kJ/m^2/d)]   Slope of linear part</span></span>
+<span id="cb31-29"><a href="#cb31-29" tabindex="-1"></a>  <span class="co">#     - Phosphorus dependence (Hill like dependence) -</span></span>
+<span id="cb31-30"><a href="#cb31-30" tabindex="-1"></a>  <span class="at">C_P      =</span> <span class="fl">0.3</span>,     <span class="co"># [mg/L]  Phosporus concentration in water</span></span>
+<span id="cb31-31"><a href="#cb31-31" tabindex="-1"></a>  <span class="at">CP50     =</span> <span class="fl">0.0043</span>,  <span class="co"># [mg/L]  P-conc. where growth rate is half</span></span>
+<span id="cb31-32"><a href="#cb31-32" tabindex="-1"></a>  <span class="at">a_P      =</span> <span class="dv">1</span>,       <span class="co"># []  Hill coefficient</span></span>
+<span id="cb31-33"><a href="#cb31-33" tabindex="-1"></a>  <span class="at">KiP      =</span> <span class="dv">101</span>,     <span class="co"># [mg/L]  P-inhibition constant for very high P-conc.</span></span>
+<span id="cb31-34"><a href="#cb31-34" tabindex="-1"></a>  <span class="co">#     - Nitrogen dependence (Hill like dependence) -</span></span>
+<span id="cb31-35"><a href="#cb31-35" tabindex="-1"></a>  <span class="at">C_N      =</span> <span class="fl">0.6</span>,     <span class="co"># [mg/L]  Nitrogen concentration in water</span></span>
+<span id="cb31-36"><a href="#cb31-36" tabindex="-1"></a>  <span class="at">CN50     =</span> <span class="fl">0.034</span>,   <span class="co"># [mg/L]  N-conc. where growth rate is half</span></span>
+<span id="cb31-37"><a href="#cb31-37" tabindex="-1"></a>  <span class="at">a_N      =</span> <span class="dv">1</span>,       <span class="co"># []  Hill coefficient</span></span>
+<span id="cb31-38"><a href="#cb31-38" tabindex="-1"></a>  <span class="at">KiN      =</span> <span class="dv">604</span>,     <span class="co"># [mg/L]  n-inhibition constant for very high P-conc.</span></span>
+<span id="cb31-39"><a href="#cb31-39" tabindex="-1"></a>  <span class="co">#     - Density dependence -</span></span>
+<span id="cb31-40"><a href="#cb31-40" tabindex="-1"></a>  <span class="at">BM50     =</span> <span class="dv">176</span>,     <span class="co"># [g_dw/m^2] Cut off BM</span></span>
+<span id="cb31-41"><a href="#cb31-41" tabindex="-1"></a>  <span class="co">#     - Others -</span></span>
+<span id="cb31-42"><a href="#cb31-42" tabindex="-1"></a>  <span class="at">mass_per_frond =</span> <span class="fl">0.0001</span>,  <span class="co"># [g_dw/frond]  Dry weight per frond</span></span>
+<span id="cb31-43"><a href="#cb31-43" tabindex="-1"></a>  <span class="at">BMw2BMd  =</span> <span class="fl">16.7</span>     <span class="co"># [g_fresh/g_dry]  Fresh- / dryweight </span></span>
+<span id="cb31-44"><a href="#cb31-44" tabindex="-1"></a>)</span>
+<span id="cb31-45"><a href="#cb31-45" tabindex="-1"></a></span>
+<span id="cb31-46"><a href="#cb31-46" tabindex="-1"></a></span>
+<span id="cb31-47"><a href="#cb31-47" tabindex="-1"></a><span class="do">## Define the forcing variables</span></span>
+<span id="cb31-48"><a href="#cb31-48" tabindex="-1"></a>forc_temp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">t =</span> <span class="dv">0</span>, <span class="at">tmp =</span> <span class="dv">12</span>) <span class="co"># [°C]  Current temperature (may also be a table)</span></span>
+<span id="cb31-49"><a href="#cb31-49" tabindex="-1"></a>forc_rad  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">t =</span> <span class="dv">0</span>, <span class="at">rad =</span> <span class="dv">15000</span>) <span class="co"># [kJ/m²/d]  Radiation  (may also be given as table)</span></span>
+<span id="cb31-50"><a href="#cb31-50" tabindex="-1"></a></span>
+<span id="cb31-51"><a href="#cb31-51" tabindex="-1"></a></span>
+<span id="cb31-52"><a href="#cb31-52" tabindex="-1"></a><span class="do">## Define a simple exposure pattern</span></span>
+<span id="cb31-53"><a href="#cb31-53" tabindex="-1"></a><span class="co"># t 0..6  concentration 1 ug/L</span></span>
+<span id="cb31-54"><a href="#cb31-54" tabindex="-1"></a><span class="co"># t 7..14 concentration 0 ug/L</span></span>
+<span id="cb31-55"><a href="#cb31-55" tabindex="-1"></a>exposure <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">14</span>, </span>
+<span id="cb31-56"><a href="#cb31-56" tabindex="-1"></a>                       <span class="at">conc =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">7</span>), <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">8</span>))</span>
+<span id="cb31-57"><a href="#cb31-57" tabindex="-1"></a>                       )</span>
+<span id="cb31-58"><a href="#cb31-58" tabindex="-1"></a></span>
+<span id="cb31-59"><a href="#cb31-59" tabindex="-1"></a></span>
+<span id="cb31-60"><a href="#cb31-60" tabindex="-1"></a><span class="do">## Set initial values </span></span>
+<span id="cb31-61"><a href="#cb31-61" tabindex="-1"></a><span class="co"># given in file &#39;mmc2.r&#39; of Schmitt et al. (2013)</span></span>
+<span id="cb31-62"><a href="#cb31-62" tabindex="-1"></a>init <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb31-63"><a href="#cb31-63" tabindex="-1"></a>  <span class="at">BM       =</span> <span class="dv">50</span>,     <span class="co"># [g_dw/m^2]  Dry Biomass dry weight per m2</span></span>
+<span id="cb31-64"><a href="#cb31-64" tabindex="-1"></a>  <span class="at">E        =</span> <span class="dv">1</span>,      <span class="co"># (0-1)  (Toxic) Effect = Factor on growth rate  (Range: 0 - 1, 1=no effect)</span></span>
+<span id="cb31-65"><a href="#cb31-65" tabindex="-1"></a>  <span class="at">M_int    =</span> <span class="dv">0</span>       <span class="co"># [ug]   Amount of toxicant in biomass</span></span>
+<span id="cb31-66"><a href="#cb31-66" tabindex="-1"></a>)</span>
+<span id="cb31-67"><a href="#cb31-67" tabindex="-1"></a></span>
+<span id="cb31-68"><a href="#cb31-68" tabindex="-1"></a><span class="do">## create a scenario object, containing the model (with parameters) and the exposure time-series</span></span>
+<span id="cb31-69"><a href="#cb31-69" tabindex="-1"></a><span class="fu">Lemna_Schmitt</span>() <span class="sc">%&gt;%</span>               <span class="co"># the Lemna model by Schmitt et al. (2013)</span></span>
+<span id="cb31-70"><a href="#cb31-70" tabindex="-1"></a>  <span class="fu">set_tag</span>(<span class="st">&quot;metsulfuron&quot;</span>) <span class="sc">%&gt;%</span>      <span class="co"># set a tage for the specific implementation of the model</span></span>
+<span id="cb31-71"><a href="#cb31-71" tabindex="-1"></a>  <span class="fu">set_init</span>(init) <span class="sc">%&gt;%</span>              <span class="co"># set the starting values (as prepared above)</span></span>
+<span id="cb31-72"><a href="#cb31-72" tabindex="-1"></a>  <span class="fu">set_param</span>(param_study) <span class="sc">%&gt;%</span>      <span class="co"># set the parameters (as prepared above)</span></span>
+<span id="cb31-73"><a href="#cb31-73" tabindex="-1"></a>  <span class="fu">set_exposure</span>(exposure) <span class="sc">%&gt;%</span>      <span class="co"># set the exposure scenario (exposure time series)</span></span>
+<span id="cb31-74"><a href="#cb31-74" tabindex="-1"></a>  <span class="fu">set_forcings</span>(<span class="at">temp=</span>forc_temp, <span class="at">rad=</span>forc_rad) <span class="ot">-&gt;</span> metsulfuron <span class="co"># set the external forcing </span></span>
+<span id="cb31-75"><a href="#cb31-75" tabindex="-1"></a><span class="co"># variables, and save everything as an object</span></span></code></pre></div>
+</div>
+<div id="simulating-a-scenario-and-plotting" class="section level3">
+<h3>Simulating a scenario and plotting</h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="do">## simulate with model, under a range of different exposure scenarios</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="co"># create several exposure scenarios</span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a>exp_scen <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">time =</span> Schmitt2013<span class="sc">$</span>t,</span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a>                       <span class="at">conc =</span> Schmitt2013<span class="sc">$</span>conc,</span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a>                       <span class="at">trial =</span> Schmitt2013<span class="sc">$</span>ID)</span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="co"># simulate for all these scenarios</span></span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a>results <span class="ot">&lt;-</span> metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a>  <span class="fu">batch</span>(exp_scen) <span class="sc">%&gt;%</span></span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a>  <span class="fu">simulate</span>()</span>
+<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" tabindex="-1"></a><span class="co"># plot results</span></span>
+<span id="cb32-12"><a href="#cb32-12" tabindex="-1"></a><span class="fu">plot_sd</span>(</span>
+<span id="cb32-13"><a href="#cb32-13" tabindex="-1"></a>  <span class="at">model_base =</span> metsulfuron,</span>
+<span id="cb32-14"><a href="#cb32-14" tabindex="-1"></a>  <span class="at">treatments =</span> exp_scen,</span>
+<span id="cb32-15"><a href="#cb32-15" tabindex="-1"></a>  <span class="at">rs_mean =</span> results,</span>
+<span id="cb32-16"><a href="#cb32-16" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAABnlBMVEUAAAAAADoAAGYAOpAAZJwAZrYAcrIAnnMZGT8ZGWIZP4EZYp8aGhozMzM6AAA6ADo6AGY6kNs/GRk/GT8/GWI/P4E/gb1NTU1NTVNNTV5NTWRNTW5NTXlNTY5NU01NWXlNWY5NZG9NaX9Nbo5Nbp1NbqtNg8hNjshWtOlZjuReTW5eTY5iGRliGT9iGWJiP4Fin9lkTU1kTW5mAABmADpmkJBmtv9pTU1uTU1uTW5uTY5ubo5ubqtuq+RvZG5vZI55yP+BPxmBPz+BP2KBYhmBn4GBvdmDTU2DTVODTVmDyP+OTU2OTW6OTY6OWU2Obk2ObquOyP+QOgCQkGaQtpCQ27aQ2/+dXk2dbo6d5P+fYhmf2dmi//+rbk2rbmOrbm6rjk2ryKur5OSr5P+1jk22ZgC2/9u2//+7UwC9gT+92dnIjk3I///Ozs7VXgDZn2LZvYHZ2Z/Z2b3Z2dnbkDrb///g4ODkjlnkq2Pkq2nkq27k///mnwDr6+vw5EL/tmb/yIP/yI7/25D/29v/5Kv//7b//8j//9v//+T///9kel0eAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAMcElEQVR4nO2di38bRxHH5QTHaau4tSEVpRQoUDAQaMBgEqiBPnmUlw0EiEkLBGNSJUi2nEKc1K6NX/dfs7O3d7d7t6fZvdfuSfP7JDpJ95j1V7Oze/Ldz52ANFYd1w3wXQQIEQFCRIAQESBEBAhRMUBXmpXDoEUBjZrUFYdBCRASlAAhQQkQEpQAIUEJEBKUACFBCRAStBlAO693QU9/sH2NPRRtq1lQTaxBt/vUxmg0XOx2r9sGbSyDhp/agMZfH917xnpf2wxKxYKX7Nn2N98ZDT/5jmXQZgFtf2sjfGKnQoDUWOzZAGjdNk4hJ4CGVz/gH6SlCgFSY4m8tQjuBNDg6eYAybGGi5f5k53Xn7cNOi0ZxJ9tXzPnM201CIrPcNF8DHM2ij3f4CgWxRKdzY6PG0CjBuZBqVh8jO92WQ26x+dH3o5iZTT5M+lq2kqAkLYSIKStHgI6/sH9IDh9t/fK43hBgCQd9l66H5zfWQv2vhotIkAufgPjJOg4QP0X/8Yy6PRX9yGTxCICBA8fhc+1i7ErbfeIANUcRhsU72LHrz0OTn95VywC8UF+1KQiQC6C4oAOX+FkxEKsoAwKpc2gnLbW0PJOp9MCQPoaVG96d0Klst3TLvaoB1o7/yN7/GzdRVqQCbQfZjMZ9OTJE7sMggnQy6wA9b8tz4NKtyNQiHT0ZJoB9ERRKqjRTBpqz/n7d6V3ygPKEHFQpFNICtQgIZggsjxiHY3vWW6YT9UXi3JQXQ0SZEyCmgDig9fxTTmLimTQ2F409nCVZVC6G5UexUIdxrWnvxbktjW/5QiZWgFl6osxUnNAe6xvsXMyOFn9RwxobHamKm/pHmHVxVQkpYMaAOr/CDrWx5/7RfDo88gwn+RKpeMvkkH6Uajk8GqeQefv3QRApz/v9V74Rh4gmzGpMkA2FaVGQGL40pysVtmLTLKdB62k+1gExQGJ4YtOVseqv+biZDVoEyD6wixPh1/8fq/34/upk9V6+7++HHh4Ng86/Rkbvr5+t6aTVaM9PM8g+Ka+v1b1yarNHn4DArHqXNnJavFs97SLMZ3fWa3gZLX4Hr5n0Om7q+JZsZPV0i33HNDxjQgLAdJJ8Dn80k97X/4TDfNZ7SVf2n/6K9Gb7jLowYdcYvHhA3zRxCjG5MtM2ltA9KtnRKmzeRcXWjgJWiCDpkzFatAUyRQQzKaTC6imSMbXKCqX4E2RyJoCEQFCRIAQkbnJ+KB0ITkSlAAhQQkQEpQAIUEJEBKUACFBCRASlAAhQWsFpPEZgTtrn9qANZfNb58vBiiOPipyK3pTGZT2NBHeGWwxML/9uXAGCTADbv5iqSYBJff477zB8wbesG9rUUC3L7/teQYlLhGsr8Gt68Orb9XfxUZJ1/K9iyU+I+Dfw7IITBCAml1bJxdQytPk9nVLk5OJB5TxGdl+lQDJTVR9Rnbe3OBeLNTFkqalfUbgDYuRd5IBVaKJnUlX3FYChLSVACFt9RAQmZuQuQkWlMxNkKBkboIEJXMTJKjX5iZBKwC5MDfRZ7unXaxRcxP9wu8MqtfcxGgPfwEJ1WFuYrOH94AqNTex0NLSklwOPKxBoSoyN7HYYylU0JIMKmtuYtHyFBkXgObm5iwB2ZubWGhJ1dhsr7mLzYVKBa3W3MTig8rkirsiLcjog1ZkbrJkLZuftS5AejK2gPLNTdCuUZXkLjZXoUyCkrkJEpTMTZCgZG6CBCVzEyQomZsgQcncBAlK5iZIUDI3QYK2ztzEQ2MBrbmJi2znQR9Yq1zQouYm2Q/T5KOdyAzKNzchQLI0M2kCJIt+9YyIzE2MM2jKROYmiMjcBBGZmyAiawpEBAgRAUIUAzpbjx3qL2xhezmZkjgJKmXQQaezYop1Wq+T3jRlNK2Awo5mwGh6AXFGBjXIRVu9AMQyaOYWZdBID8iQzrQCOjClM6WA7OZBxnE0DhrDRUurCGtAcdBBNwrFgnavFwjaxA11KQcNuB/8nrlxx6hYBoU37MNtxM9EQcHVwDpoc4BiBw3uKmBl3lEYUPJkAJhu26SQBhCbJi4czXc6s/VkULRsMINAwnZGBLYOKgHavPiQ1aEVVowWagU0StyE7NpaJOhwMTZRAXsD+6BykWYz6AOozwcXH9YJCErBwKpKl8qgKG+2r1nxyQI6WY4BVTyTTgFKvGAs21oMkKg8YDhjJXeAGswgyZfHlo8rQPB/0LVxVxqVyaDQKoQ9v8cnRqVGsfoAlZYfM+mT5Vpm0hW21fW5mI0IEAEiQGZBydwECUrmJkhQMjdBgpK5CRKUzE2QoGRuggTFAf2XXwb8E7hntfeZv4gV1MUSQHBp2X++8Pj811+TR7HKPqj2ZxBMgF74c3D+3g26XyxPrrw7UtnuYRcL1bx3R9CuDGrQu2NsW70F1F+NnxEgjR5xcxP6W8+56n8HKo+Lv/W8v7+fySD/7vYRlbmZk9V9Ram2NgPo0qVLdoDyzU32q9fYbOdBP2GtS1mph9evM78l0y9zk0oySEUyNmjrzE38q0Fc/pib+AfIM3MT/24Lzzc3oZt6ufLNTQhQLL25SdPZ7mkXC3LNTSiDhPLMTQhQqFxzE+piMh8yN8kTmZuYicxNENGvnhGRuYlxBrnVlXEvzV+Zb9o2cxNvAflibuItIDI3IelFgBAVvAzYyYjrRC26TtqNWgUoNVAc3xDf4QnBpcrJ896Ld+UtX0qmKPLl3+JVfCgxlUkO1SZA6rXafN56fFOau+5JuPpr0lUpsOVe/Eq+/Fu8ig91KEAmh2oToNRkVXxbHjfq+Ie/iV/Apon4aUD0jnL5t3gVHSp8pRyqTYA0pzvSy/P3/550sePX/ip1MTWD5It3g7hTya/kQ7UJkHrCzKHcWY2f761KNQi+5gMGESGleEmXfwdS1VmN1imHahOgTAYl35bzlTIgZVMoL4dJldZlUHQosa6dgNInzNK35dE3nxGw09/KgFKpJ/1tyyAexdaSdcqh6gYU+4zAbbXhvc7srUI39aZPmBU+4XplFEu6mCaDkmPxnIkP5WKYF94d8S3H7NmgiDVFupSIb8v1gNim0sznsKfMijLzoORQzgDtvBEljZ2xiQLIhZoCtH0tum99ePWtgl3MiZoCBH4LYRaBCQJY5BAgBRAXr0PcP6iQU40TNQ9o+1UCpAEE49bOmxsCE3WxDKDEZwTqdSGTNzdq00zaiQgQIgKEiAAhIkCIWmRu4kYtMjdxoxLmJk1fYeZGJcxNGr/g1IlKmJtQBiHmJgQIMTehLoaYm1AGIeYmBChSjrkJdTGhPHMTyiChPHMTAiTUj38BToB0yjU3oRoUKtfchDKIK9/chABx5Zub/Mta/85Tqk+lVvgNKN/cpMIMSvEK2pRBXFpzE+piiTLmJjSKxdKbm8ADZRCXP+YmbtQicxM3apG5iRu1yNzEjVpkbuJGLTI3caMWmZu4UYvMTdyoReYmbtQicxM3apG5iRuVMDepxvrBZkcXKmFuQoBkacxNCJAiMjchaUWAEBEgRAQIUVFAqVv1UzYjgaHPiHp7LeYz4kQFAamXTWdsRgx9RlSbEdRnxIkKAlLnjWmbEUOfEdVmBPcZcaKCgLJnHvIrY58R1SQC8xlxooKAMj4jss2Iuc+IajOC+Yw4UUUZJNuMWPiMaDMo12fEiSqpQSkbDXOfEdVmBPMZcaLCo5h87pqxGQkMfUZUmxHMZ8SJKpkHZWxGAkOfEc08aIzPiBPRTBoRAUJEgBARIEQECBEBQuQa0Nl6J9Ts0bO3xm63wpcHF7Zytjj57rj9C8s1INB4NKF2Z8NlPqDg4OLDypqUqCWA4vQYAyhKsmrlDyD2ePTs7+c7nYUj9rAS9r4Ixy5kx8lyZ+Z37B1Y31kINiGpWGbxl8CmlhTyC9A8+xF3O/BwYetsfVaAAVYLwGeB/b+wdbLMaLANIJlY1vC9j+ZXzLqqtTwDtJL8rLwzcRhiwd9gYP73MNwa3jx6bov9E8cRG1crvwDxZBAPu+HotgBbhEkD2cRxHLD3Z25B94LavcmGQH4cnmdVy2NAUkVRAJ0sMziw1dFz/1wXCcaL1ZQBOphJKkrSxdgDr8Ww9mz9e1H34htMWRc7W2cgIkqbvEjP8iIN7x3Nw4pd6FucW7Jn1fIXEB/moyw6kId5VnRm/rAc1fOoIsVDXrXyAZCB9OcRyQAGmtyJoomiUw31TaUoT+6phok06cGnlYkm+GTVaxEgRAQIEQFCRIAQESBEBAjR/wFqon+XGntlYgAAAABJRU5ErkJggg==" width="100%" /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="do">## simulate with model, under a range of different exposure scenarios, and including </span></span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="do">## a biomass transfer</span></span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a><span class="co"># simulate for all scenarios</span></span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a>results <span class="ot">&lt;-</span> metsulfuron <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>  <span class="fu">set_transfer</span>(<span class="at">interval =</span> <span class="fu">c</span>(<span class="dv">5</span>), <span class="at">biomass =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="co"># implement a biomass transfer every 5 days</span></span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>  <span class="fu">batch</span>(exp_scen) <span class="sc">%&gt;%</span></span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a>  <span class="fu">simulate</span>()</span>
+<span id="cb33-10"><a href="#cb33-10" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" tabindex="-1"></a><span class="co"># plot results</span></span>
+<span id="cb33-12"><a href="#cb33-12" tabindex="-1"></a><span class="fu">plot_sd</span>(</span>
+<span id="cb33-13"><a href="#cb33-13" tabindex="-1"></a>  <span class="at">model_base =</span> metsulfuron,</span>
+<span id="cb33-14"><a href="#cb33-14" tabindex="-1"></a>  <span class="at">treatments =</span> exp_scen,</span>
+<span id="cb33-15"><a href="#cb33-15" tabindex="-1"></a>  <span class="at">rs_mean =</span> results,</span>
+<span id="cb33-16"><a href="#cb33-16" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAABWVBMVEUAAAAAADoAAGYAOpAAZJwAZrYAcrIAi2UAnnMZGT8ZGWIZP4EZYp8aGhozMzM6AAA6ADo6AGY6kNs/GRk/GT8/GWI/P4E/gb1NTU1NTW5NTY5NU39NXl5NbqtNjshWtOlZTU1ZTW5ZZKtiGRliGT9iGWJiP4Fin9lkTU1kov9mAABmADpmkJBmtv9uTU1uTW5uTY5ubo5ubqtuq+R5yP+BPxmBPz+BP2KBYhmBn4GBvdmOTU2OTW6OTY6Obk2ObquOyP+QOgCQkGaQtpCQ27aQ2/+fYhmf2dmraU2rbk2rbm6rjk2ryKur5OSr5P+2ZgC2/9u2//+7UwC9gT+92dnIjk3I///N///Ozs7TyDrVXgDZn2LZvYHZ2Z/Z2b3Z2dnbkDrb///g4ODkq27k///mnwDr6+vw5EL/tmb/yI7/25D/29v/5Kv//6L//7b//8j//9v//+T///+7YIqLAAAACXBIWXMAAA7DAAAOwwHHb6hkAAANpklEQVR4nO2c/X/UxhHGZd4CSYwT0xKnbeo2tCF1676E5qVJ2thpwXHSQm1CavDLAcbGuK7B+v9/6M7qXdrV7KxWWkk3zwfuTjqdZv292dmVTnqCkFWrwHcD+i4GhIgBIWJAiBgQIgaEiAjoaufyHZgKaNKxrvoOzICQwAwICcyAkMAMCAnMgJDADAgJzICQwG0D2vt4FvTG97s3xIN9Ow0DK8Jtz86+vjaZ7Fybnb1pEbiDDNr58Rq0/Obk/pv0D9MzqBQOFsWr3V99Ptn50ef0wF0B2v31WvSCKEtAxXDi1TbQukNIoa4B7Vz/Xn6LVFkCKoaLU5cUv2tA2290CigfbufaFfli7+N3LAJPRQbJV7s3KHymqwZB8dm5RhnDfIxi73Q7iiXh4s5G5dM5oEk386BSODnGz86KGnRfzo/6OYo10uhn0q7ayYCQdjIgpJ0MCGnnYAD5+vXFW2AqIHg4jBcOVU8N1qo2SgG1HkkTmArosGNd9R24BtDZ+sK7d8Pw5RcL7z1LAdG+hnFn0IOV8MV7z87WV8L9nyfrDAEFQm6a3WNAL//6Q/J08scfFO1URgmCGI4XQAcgy0iawHpAJx99B13s5KNn4csv74bxQFLXbQFNbslpKUBq0EEk+dJJXIMadPL7FaAjelkMqPxF5oEHlU51GBC/MvVGWAbFZPJrD+wiaQLXZZAkk2VQuZ0ZGcmmHKVdQAcVMp0DevmVJKOpQUGFTCVKQGuReqMKoAyMbp9dAYJRTKTP2fqt/CgG3bNYa7RyUoQKNSgpM4icVCEDQGICtPDnMPzfhws//U8KiPA1tJNBBvtUpFcrGRSG+wsrodU8KHpSVSZqs3sN6ORPf1uhzoP6AChUlW7Dj1YC1x1qfPuv9RXKPKgsF0XI6ljMRREyALR/C7qX2TxIvTYYdQbJESyfQeV29hcQEGof0P4C6FaDGjRyQOJYY2HhN2IU+8XCz4rzIHM1r0KW54OaVyGDmfSXd8+++eXds/UP84BoX0PgKYNECrWfQS+AyoOVJl1s3IBAhYNV8jB/6KCP2Z5ybdzHjADBcViTYV7s3lMGhQddZNDLL26FjYb5WkBBdg5poIDgjBn5lGt5McitDQqK1spXh8qNGgEKD6prD4oqfjT3hiGgiE+oON1BUR6JyTbljax/9jmoqnaL8udNJ4or9qc7yGtddrGORrEwbHK6w0WzC4C2nkrFT0+3VE+lxfYBNaxBvgFtGUfSBEYBNZsHNVaff3qOVJoH+brIwltgQgZNp4g1aPpkMIrl50HTJ/z6oMLlL9MntqZAxIAQMSBEfJUrEpivk0YCMyAkMANCAjMgJDADQgIzICQwA0ICMyAkcEuAFCYjcFvt62vwzhULAwQqoLQBE6u70bvIoLKnSWycIZ62Cbc/N8igGMy2NH8hqyNA2Q3+e5/IvIEVNu20BnTnyl/6nEGZRYToa3Df+s71zzrpYpOsa/W6i2UmI2DeI7IIHBCAGrWdYwVU8jS5c5NqcjJ2QBWTkd0PGFC+fUWTkb1P16QRC3exrF1lkxFYQRl2RwzIjcY6k3beTgaEtJMBIe1kQEg7BwPI168v3gKzuYlmrS0gXxd69fEKMzY3AbVjbuKu2T0GZGduMkWA6OYmbZaCHtYgkrlJae2iEPUrU2/U6wwyMTdZVArecNPsHgOqNzfJodBEWXTS7Aqgy6gsI2kC25ibABi8ExtsQigFMjD8+egn8C1IgVs0N1mkfWXqjSy62GW7SJrALZqbjB9QQ3MTX4DCy1aRNIHbNDdxUYVs5kFOqpABoMbmJouEbXUbWQ3zl20iaQK3aW4yckBqcxNSmjroY1aHGi76mEEXU5qbkL6GRU8ZBCnUfga5MDdZHDMgF+YmvgAJQu0DAjU1N2lehCxPdzSvQkaAmpubLHrKoPByFxnkwNxk1ICcmJssarctnTCpnlSqAqIYC7xm6rxQPV9iCMiNuYn6hFr+hElpUVMKZOAtgl6LhZ4+sq5BenMTkjXE08I32ayL9dKaQnG6gwHlpahBDCgv/tkHEZubGGfQdIrNTRCxuQkiNjdBxNYUiBgQIgaEKAX0ajU1wzy3od3c23TEW+Asg46CYBnlOeXXSd9DGU05oKij1TGaekCSUV0N8tXOvgASGTRzmzNoogaE0ZlyQEconekGZDgPIoRQ2GfsXKP6RFgASuNuzybRRNzZm6S4Hd0vVrLPgPvB7xOMOya2GRTdsw93Er+ZxAVjA5vAXQBK7TOkqwDNvKMBoOzFNmC6Q0shBSAxTZw/nguCi84zKHnuNoNAsfNMHNsmcAbo3vknog4ti2I03xagSeYmRG2nFaCda6mPCjgcWAXOFWkxgz6C+nx0/klLgKAObNOqdMMMSvJm9waRTxXQ6VIKyN1MugQo84Iht9MSUFx5wHOGKC+Aus2gnDUPnY8HQPB/e5bkrjRplkGRW4h4fV9OjBqOYq0Aaq7+zKRPl1zPpJ220z8gMzEgBlQKzICQwAwICczmJkhgNjfRrLUF5OtCrz5eYcbmJiA2N9GsNbgdis1NQGxuggRux9zEbu3gMsjE3KTtZvcYUL25yXNUbppdAXSpKJu/3Wgjo1Hs7Jv3n5Vu6oXuCX8+2ofxLUilQAYGIqX3L1XlNjBqbmJ9U+9z4lem3ojexS5ZRtIEbs+7wxegw0t2kTSBW/TucNLJLG6ou5BfaBy4Re+O57SvTL2Rze1QF7q5Haq5d8dzUovUG/UYkNq7gxLFFyBJqJMb6iCDGtzU66IIWdSgYhVqGhg1N7H3MJMp5CWDIIXazyAoPCd/uNvkdMe4AenNTcxvqn3o66beCx3d1Ks2NzEtBVtbD52VAmLgrAq1WIO05iaE27If+rot/EIXGaQzN2FAkbTmJpQb+x9SAWXnSxoBimaLFoDgdIAZIL25iXkpEFUoFn7+KMHipAaJKhRLcT6kVuY1iM1NEECx2NwEEZubIOKffRCxuYlxBvnX1brF2jftPzooc5NeAuqTuUkvAbG5CatWDAjRUC7i9KahXAbsTcMBVBos4CeFlVzL4JgxtyAvr8xt+5NsoiInLene5FK2s3hGk+1tMICKB83JTwpZy/bzuKLLK/Pb7qeLLwBWuje5lO3sRUwy29tgAJUmrPFPCmnD5IUW+W1zkgcDyaoH7/5T7CXZW7SU7ixaLOxtMIAUhzy5xehCi2zb7/JdrJhBEky2twR6vDO5mN/bYAAVD5olFDHHTxRdaJEiiC6vzAgVyhcwyPaWFp1b6ZuFvQ0GUCWD5E8K2ZsFQMVtoby8yKq0KoPSncVvDhBQ+aA5PmUeKb7QIt32qwKgUvKd5GpQOoqt5N4s7K1FQKnJCNxTG93rLFZZ3tRbPmgu8IneL45iuS6myKBsbzJlsp11PMzH3h3p/cbi1badNUW5kCQ/KagBiW1zEx8xeOdrdnUelNuZD0B7nyRJQzQ2KQLypA4A7d5Iblrfuf6ZdRfzpQ4Agd9ClEXggAAWOQyoAEhK1iHpH2Tn3eFNnQLa/YABKQDBuLX36VqMibtYBVBmMgL12tLkzZsGM5P2JQaEiAEhYkCIGBAiBoSIfxdDZGNu4uMKM2+yMTehXGyaqOmFXt5kY27CGRRJa27CgKT05iYMSEpvbsI1SEpvbsIZJKU3N2FAUmpzE0j7zaqmsYupzU3gQZErCmajzyC9uYlRF5sCQFpzE7MatDl6QFpzE7OBvViXxliDtOYmhqPY5sgzSG9uwoCk9OYmpvOgzXEDCrXmJqaHF/kqNMYapDU3MZ5Jb446g/TmJgxIyoW5yeaYAYGamptkVWiMNciFucnmqDPIgbnJqAE5MTfZtAT06NGjvgNyY26SnPx4RNQAalC/zE28aSjmJt40FHMTbxqKuYk3DcXcxJtszE1cuT7QPupJNuYmDCgvhbkJAyqIzU1YdWJAiBgQIgaEiAwI8Rgp3FxL8BgpmYxU7q31JiogzGOkYDJi7jFSMhmpeox4ExUQ4jFSMBkx9xgpmYwoPEa8iQqo3mOkaDJC8RgpmYxUPEa8iQqo3mOkaDJC8RgpmYxUPEa8qXEG5T1GSiYjFI+RkslIxWPEmxrWoJKHRtFkhOIxUjIZqXiMeBN9FKv3GCmMzASPkZLJyHCHecxjpPA3ETxGSiYjAwY0bWJAiBgQIgaEiAEhYkCIfAJ6tRpEunj81u3a7Zbl89G5Dc0Wp7+t+3wj+c6gejSRHl+MnvWAwqPzT5w1qagBAErTowZQkmTu1Q9A4vH4rb/PBcH8sXhYjnpfguMxZMfpUjDztVgD7wfz4T1IKpFZchHYtJZC/QE0J/7ExwE8nNt4tXoxBgOs5oHPvPh/buN0SdAQG0AyiayRnz6eWzbrqlbqEaDl7G+VnUnCiJ/kCgHmv0+irWHl8dsb4l+8n3hj9+oPIJkM8cPjaHSbhy2ipIFskjiOxPqZ29C9oHbfE0Og3I/MszbUU0C5ilIAdLok4MBWx2//ezVOMFmspgzQ0UxWUbIuJh5kLYZ3X63+LulecoMp62KvVgWIhNK9efj7L8oiDeuO5+CNx9C3JLfsk22on4DkMJ9k0VF+mBdFZ+YfS0k9TypSOuS5l29ABlIfR2QDGGi8E0UTJYcaxZXz+aXxHmqYSJEeclqZacQHq70XA0LEgBAxIEQMCBEDQsSAEP0fE+oE1Svdyv8AAAAASUVORK5CYII=" width="100%" /></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

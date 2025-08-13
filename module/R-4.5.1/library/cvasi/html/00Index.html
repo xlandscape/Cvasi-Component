@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head><title>R: Calibration, Validation, and Simulation of TKTD Models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+<h1> Calibration, Validation, and Simulation of TKTD Models
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;cvasi&rsquo; version 1.4.0</h2>
+
+<ul><li><a href="../DESCRIPTION" type="text/plain; charset=utf-8">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+<li><a href="../NEWS.md">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="#A">A</a>
+<a href="#B">B</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#I">I</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#P">P</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+</p>
+
+
+<h2><a id="A">-- A --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Algae-models.html">Algae-class</a></td>
+<td>Algae models</td></tr>
+<tr><td style="width: 25%;"><a href="Algae-models.html">Algae-models</a></td>
+<td>Algae models</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_Simple.html">AlgaeSimple-class</a></td>
+<td>Algae model with exponential growth but without additional forcings</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_Simple.html">AlgaeSimpleScenario-class</a></td>
+<td>Algae model with exponential growth but without additional forcings</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_TKTD.html">AlgaeTKTD-class</a></td>
+<td>Algae model with exponential growth, forcings (P, I) and scaled damage</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_TKTD.html">AlgaeTKTDScenario-class</a></td>
+<td>Algae model with exponential growth, forcings (P, I) and scaled damage</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_Weber.html">AlgaeWeber-class</a></td>
+<td>Algae model with exponential growth and forcings (I, T)</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_Weber.html">AlgaeWeberScenario-class</a></td>
+<td>Algae model with exponential growth and forcings (I, T)</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_Simple.html">Algae_Simple</a></td>
+<td>Algae model with exponential growth but without additional forcings</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_TKTD.html">Algae_TKTD</a></td>
+<td>Algae model with exponential growth, forcings (P, I) and scaled damage</td></tr>
+<tr><td style="width: 25%;"><a href="Algae_Weber.html">Algae_Weber</a></td>
+<td>Algae model with exponential growth and forcings (I, T)</td></tr>
+<tr><td style="width: 25%;"><a href="americamysis.html">americamysis</a></td>
+<td>A DEB abj scenario of Americamysis bahia</td></tr>
+</table>
+
+<h2><a id="B">-- B --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="batch.html">batch</a></td>
+<td>Batch simulation of multiple exposure levels</td></tr>
+<tr><td style="width: 25%;"><a href="Transferable.html">Biomass-transfer</a></td>
+<td>Biomass transfer class</td></tr>
+</table>
+
+<h2><a id="C">-- C --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="cache_controls.html">cache_controls</a></td>
+<td>Cache control simulations</td></tr>
+<tr><td style="width: 25%;"><a href="calibrate.html">calibrate</a></td>
+<td>Fit model parameters to experimental data</td></tr>
+<tr><td style="width: 25%;"><a href="calibrate.html">calibrate-method</a></td>
+<td>Fit model parameters to experimental data</td></tr>
+<tr><td style="width: 25%;"><a href="CalibrationSet.html">CalibrationSet</a></td>
+<td>Calibration set</td></tr>
+<tr><td style="width: 25%;"><a href="CalibrationSet.html">CalibrationSet-class</a></td>
+<td>Calibration set</td></tr>
+<tr><td style="width: 25%;"><a href="CalibrationSet.html">caliset</a></td>
+<td>Calibration set</td></tr>
+</table>
+
+<h2><a id="D">-- D --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="DEB-models.html">Deb-class</a></td>
+<td>Dynamic Energy Budget (DEB) models</td></tr>
+<tr><td style="width: 25%;"><a href="DEB-models.html">DEB-models</a></td>
+<td>Dynamic Energy Budget (DEB) models</td></tr>
+<tr><td style="width: 25%;"><a href="DEB_abj.html">DebAbj-class</a></td>
+<td>DEB_abj</td></tr>
+<tr><td style="width: 25%;"><a href="DEBtox.html">DebDaphnia-class</a></td>
+<td>DEBtox model</td></tr>
+<tr><td style="width: 25%;"><a href="DEBtox.html">DEBtox</a></td>
+<td>DEBtox model</td></tr>
+<tr><td style="width: 25%;"><a href="DEBtox.html">DebTox-class</a></td>
+<td>DEBtox model</td></tr>
+<tr><td style="width: 25%;"><a href="DEBtox.html">DEBtox2019</a></td>
+<td>DEBtox model</td></tr>
+<tr><td style="width: 25%;"><a href="DEB_abj.html">DEB_abj</a></td>
+<td>DEB_abj</td></tr>
+<tr><td style="width: 25%;"><a href="DEBtox.html">DEB_Daphnia</a></td>
+<td>DEBtox model</td></tr>
+<tr><td style="width: 25%;"><a href="dmagna.html">dmagna</a></td>
+<td>A DEBtox scenario of Daphnia magna</td></tr>
+<tr><td style="width: 25%;"><a href="dose_response.html">dose_response</a></td>
+<td>Calculate a dose response curve</td></tr>
+</table>
+
+<h2><a id="E">-- E --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="effect.html">effect</a></td>
+<td>Effect level</td></tr>
+<tr><td style="width: 25%;"><a href="Scenarios.html">EffectScenario-class</a></td>
+<td>Effect scenario classes</td></tr>
+<tr><td style="width: 25%;"><a href="epx.html">epx</a></td>
+<td>Effect profiles (EPx values)</td></tr>
+<tr><td style="width: 25%;"><a href="epx_mtw.html">epx_mtw</a></td>
+<td>Calculate EPx values for a series of moving time window</td></tr>
+<tr><td style="width: 25%;"><a href="explore_space.html">explore_space</a></td>
+<td>Explore parameter space</td></tr>
+<tr><td style="width: 25%;"><a href="ExposureSeries.html">ExposureSeries</a></td>
+<td>Exposure time-series</td></tr>
+<tr><td style="width: 25%;"><a href="ExposureSeries.html">ExposureSeries-class</a></td>
+<td>Exposure time-series</td></tr>
+</table>
+
+<h2><a id="F">-- F --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="focusd1.html">focusd1</a></td>
+<td>A Lemna_SETAC scenario with variable environment</td></tr>
+<tr><td style="width: 25%;"><a href="fx.html">fx</a></td>
+<td>Generic to calculate effects for a particular scenario</td></tr>
+<tr><td style="width: 25%;"><a href="fx.html">fx-method</a></td>
+<td>Generic to calculate effects for a particular scenario</td></tr>
+</table>
+
+<h2><a id="G">-- G --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="get_model.html">get_model</a></td>
+<td>Get model name</td></tr>
+<tr><td style="width: 25%;"><a href="get_model.html">get_model-method</a></td>
+<td>Get model name</td></tr>
+<tr><td style="width: 25%;"><a href="get_model.html">get_model_name</a></td>
+<td>Get model name</td></tr>
+<tr><td style="width: 25%;"><a href="get_tag.html">get_tag</a></td>
+<td>Get scenario tag</td></tr>
+<tr><td style="width: 25%;"><a href="get_tag.html">get_tag-method</a></td>
+<td>Get scenario tag</td></tr>
+<tr><td style="width: 25%;"><a href="GUTS-RED-models.html">GUTS-RED-models</a></td>
+<td>GUTS-RED models</td></tr>
+<tr><td style="width: 25%;"><a href="GUTS_RED_IT.html">GutsRedIt-class</a></td>
+<td>GUTS-RED-IT scenario</td></tr>
+<tr><td style="width: 25%;"><a href="GUTS_RED_SD.html">GutsRedSd-class</a></td>
+<td>GUTS-RED-SD scenario</td></tr>
+<tr><td style="width: 25%;"><a href="GUTS_RED_IT.html">GUTS_RED_IT</a></td>
+<td>GUTS-RED-IT scenario</td></tr>
+<tr><td style="width: 25%;"><a href="GUTS_RED_SD.html">GUTS_RED_SD</a></td>
+<td>GUTS-RED-SD scenario</td></tr>
+</table>
+
+<h2><a id="I">-- I --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="import_morse.html">import_morse</a></td>
+<td>Import 'morse' model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="import_swash.html">import_swash</a></td>
+<td>SWASH project exposure profile import</td></tr>
+<tr><td style="width: 25%;"><a href="import_toxswa.html">import_toxswa</a></td>
+<td>Import _TOXSWA_ exposure series</td></tr>
+<tr><td style="width: 25%;"><a href="is_DEB.html">is_DEB</a></td>
+<td>Test if argument is a DEB model</td></tr>
+<tr><td style="width: 25%;"><a href="is_GUTS.html">is_GUTS</a></td>
+<td>Test if argument is a GUTS model</td></tr>
+<tr><td style="width: 25%;"><a href="is_GUTS.html">is_GUTS_IT</a></td>
+<td>Test if argument is a GUTS model</td></tr>
+<tr><td style="width: 25%;"><a href="is_GUTS.html">is_GUTS_SD</a></td>
+<td>Test if argument is a GUTS model</td></tr>
+<tr><td style="width: 25%;"><a href="is_Lemna.html">is_Lemna</a></td>
+<td>Test if argument is a Lemna model</td></tr>
+<tr><td style="width: 25%;"><a href="is_LemnaThreshold.html">is_LemnaThreshold</a></td>
+<td>Test if argument is a LemnaThreshold model</td></tr>
+<tr><td style="width: 25%;"><a href="is_scenario.html">is_scenario</a></td>
+<td>Test if argument is an effect scenario</td></tr>
+</table>
+
+<h2><a id="L">-- L --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Lemna-models.html">Lemna-class</a></td>
+<td>Lemna models</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna-models.html">Lemna-models</a></td>
+<td>Lemna models</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna_Schmitt.html">LemnaSchmitt-class</a></td>
+<td>Lemna model (Schmitt et al. 2013)</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna_Schmitt.html">LemnaSchmittScenario-class</a></td>
+<td>Lemna model (Schmitt et al. 2013)</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna_SETAC.html">LemnaSetac-class</a></td>
+<td>Lemna model (Klein et al. 2021)</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna_SETAC.html">LemnaSetacScenario-class</a></td>
+<td>Lemna model (Klein et al. 2021)</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna_Schmitt.html">Lemna_Schmitt</a></td>
+<td>Lemna model (Schmitt et al. 2013)</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna_Schmitt.html">Lemna_SchmittThold</a></td>
+<td>Lemna model (Schmitt et al. 2013)</td></tr>
+<tr><td style="width: 25%;"><a href="Lemna_SETAC.html">Lemna_SETAC</a></td>
+<td>Lemna model (Klein et al. 2021)</td></tr>
+<tr><td style="width: 25%;"><a href="lik_profile.html">lik_profile</a></td>
+<td>Likelihood profiling</td></tr>
+<tr><td style="width: 25%;"><a href="log_enable.html">log_disable</a></td>
+<td>Start and stop logging</td></tr>
+<tr><td style="width: 25%;"><a href="log_enable.html">log_enable</a></td>
+<td>Start and stop logging</td></tr>
+<tr><td style="width: 25%;"><a href="log_envir.html">log_envir</a></td>
+<td>Log R environment properties</td></tr>
+<tr><td style="width: 25%;"><a href="log_lik.html">log_lik</a></td>
+<td>Calculate log likelihood</td></tr>
+<tr><td style="width: 25%;"><a href="log_msg.html">log_msg</a></td>
+<td>Add a log message</td></tr>
+<tr><td style="width: 25%;"><a href="log_scenarios.html">log_scenarios</a></td>
+<td>Log scenario properties</td></tr>
+</table>
+
+<h2><a id="M">-- M --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Macrophyte-models.html">Macrophyte-models</a></td>
+<td>Macrophyte models</td></tr>
+<tr><td style="width: 25%;"><a href="metsulfuron.html">metsulfuron</a></td>
+<td>Lemna data published by Schmitt (2013)</td></tr>
+<tr><td style="width: 25%;"><a href="minnow_it.html">minnow_it</a></td>
+<td>A fitted GUTS-RED-IT scenario of the fathead minnow</td></tr>
+<tr><td style="width: 25%;"><a href="minnow_sd.html">minnow_sd</a></td>
+<td>A fitted GUTS-RED-SD scenario of the fathead minnow</td></tr>
+<tr><td style="width: 25%;"><a href="import_morse.html">morse</a></td>
+<td>Import 'morse' model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="Myrio.html">Myrio</a></td>
+<td>Myriophyllum model with exponential growth</td></tr>
+<tr><td style="width: 25%;"><a href="Myrio.html">MyrioExp-class</a></td>
+<td>Myriophyllum model with exponential growth</td></tr>
+<tr><td style="width: 25%;"><a href="Myrio.html">MyrioExpScenario-class</a></td>
+<td>Myriophyllum model with exponential growth</td></tr>
+<tr><td style="width: 25%;"><a href="Myrio_log.html">MyrioLog-class</a></td>
+<td>Myriophyllum model with logistic growth</td></tr>
+<tr><td style="width: 25%;"><a href="Myrio_log.html">MyrioLogScenario-class</a></td>
+<td>Myriophyllum model with logistic growth</td></tr>
+<tr><td style="width: 25%;"><a href="Myriophyllum-models.html">Myriophyllum-class</a></td>
+<td>Myriophyllum models</td></tr>
+<tr><td style="width: 25%;"><a href="Myriophyllum-models.html">Myriophyllum-models</a></td>
+<td>Myriophyllum models</td></tr>
+<tr><td style="width: 25%;"><a href="Myrio_log.html">Myrio_log</a></td>
+<td>Myriophyllum model with logistic growth</td></tr>
+</table>
+
+<h2><a id="N">-- N --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="no_exposure.html">no_exposure</a></td>
+<td>Zero exposure</td></tr>
+</table>
+
+<h2><a id="P">-- P --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="parameter_set.html">ParameterSet-class</a></td>
+<td>Set of model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="parameter_set.html">parameter_set</a></td>
+<td>Set of model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="parameter_set.html">parameter_set-class</a></td>
+<td>Set of model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="pll_debug.html">pll_debug</a></td>
+<td>Disable parallelization for debugging</td></tr>
+<tr><td style="width: 25%;"><a href="plot.html">plot</a></td>
+<td>S3 plotting functions</td></tr>
+<tr><td style="width: 25%;"><a href="plot.html">plot.cvasi.drc</a></td>
+<td>S3 plotting functions</td></tr>
+<tr><td style="width: 25%;"><a href="plot.html">plot.cvasi.simulate</a></td>
+<td>S3 plotting functions</td></tr>
+<tr><td style="width: 25%;"><a href="plot_epx.html">plot_epx</a></td>
+<td>Plot EPx values</td></tr>
+<tr><td style="width: 25%;"><a href="plot_lik_profile.html">plot_lik_profile</a></td>
+<td>Plot likelihood profiles or all profiled parameters</td></tr>
+<tr><td style="width: 25%;"><a href="plot_param_space.html">plot_param_space</a></td>
+<td>Plot likelihood profiles or all profiled parameters</td></tr>
+<tr><td style="width: 25%;"><a href="plot_ppc.html">plot_ppc</a></td>
+<td>Creates a PPC plot for a single dataset</td></tr>
+<tr><td style="width: 25%;"><a href="plot_ppc_combi.html">plot_ppc_combi</a></td>
+<td>Create PPC plot for one or more datasets</td></tr>
+<tr><td style="width: 25%;"><a href="plot_scenario.html">plot_scenario</a></td>
+<td>Creates a prediction plot for one effect scenario</td></tr>
+<tr><td style="width: 25%;"><a href="plot_sd.html">plot_sd</a></td>
+<td>Creates plot of model results (uncertainties optional)</td></tr>
+<tr><td style="width: 25%;"><a href="pull_metadata.html">pull_metadata</a></td>
+<td>Pull metadata from scenarios</td></tr>
+</table>
+
+<h2><a id="R">-- R --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Rsubcapitata.html">Rsubcapitata</a></td>
+<td>An algae scenario</td></tr>
+</table>
+
+<h2><a id="S">-- S --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Scenarios.html">scenario</a></td>
+<td>Effect scenario classes</td></tr>
+<tr><td style="width: 25%;"><a href="Scenarios.html">Scenarios</a></td>
+<td>Effect scenario classes</td></tr>
+<tr><td style="width: 25%;"><a href="Scenarios.html">scenarios</a></td>
+<td>Effect scenario classes</td></tr>
+<tr><td style="width: 25%;"><a href="sequence.html">ScenarioSequence-class</a></td>
+<td>Sequence of scenarios</td></tr>
+<tr><td style="width: 25%;"><a href="Schmitt2013.html">Schmitt2013</a></td>
+<td>A Lemna data set with multiple treatment levels</td></tr>
+<tr><td style="width: 25%;"><a href="sequence.html">sequence</a></td>
+<td>Sequence of scenarios</td></tr>
+<tr><td style="width: 25%;"><a href="set_bounds.html">set_bounds</a></td>
+<td>Set boundaries of model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="set_bounds.html">set_bounds-method</a></td>
+<td>Set boundaries of model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="set_endpoints.html">set_endpoints</a></td>
+<td>Set effect endpoints</td></tr>
+<tr><td style="width: 25%;"><a href="set_exposure.html">set_exposure</a></td>
+<td>Set exposure time-series</td></tr>
+<tr><td style="width: 25%;"><a href="set_exposure.html">set_exposure-method</a></td>
+<td>Set exposure time-series</td></tr>
+<tr><td style="width: 25%;"><a href="set_forcings.html">set_forcings</a></td>
+<td>Set time-dependent parameters</td></tr>
+<tr><td style="width: 25%;"><a href="set_forcings.html">set_forcings-method</a></td>
+<td>Set time-dependent parameters</td></tr>
+<tr><td style="width: 25%;"><a href="set_init.html">set_init</a></td>
+<td>Set initial state</td></tr>
+<tr><td style="width: 25%;"><a href="set_init.html">set_init-method</a></td>
+<td>Set initial state</td></tr>
+<tr><td style="width: 25%;"><a href="set_mode_of_action.html">set_moa</a></td>
+<td>Set mode of action</td></tr>
+<tr><td style="width: 25%;"><a href="set_mode_of_action.html">set_mode_of_action</a></td>
+<td>Set mode of action</td></tr>
+<tr><td style="width: 25%;"><a href="set_noexposure.html">set_noexposure</a></td>
+<td>Set zero exposure</td></tr>
+<tr><td style="width: 25%;"><a href="set_transfer.html">set_notransfer</a></td>
+<td>Set transfer events</td></tr>
+<tr><td style="width: 25%;"><a href="set_window.html">set_nowindow</a></td>
+<td>Set window length</td></tr>
+<tr><td style="width: 25%;"><a href="set_param.html">set_param</a></td>
+<td>Set model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="set_param.html">set_param-method</a></td>
+<td>Set model parameters</td></tr>
+<tr><td style="width: 25%;"><a href="set_tag.html">set_tag</a></td>
+<td>Set a tag</td></tr>
+<tr><td style="width: 25%;"><a href="set_times.html">set_times</a></td>
+<td>Set output times</td></tr>
+<tr><td style="width: 25%;"><a href="set_transfer.html">set_transfer</a></td>
+<td>Set transfer events</td></tr>
+<tr><td style="width: 25%;"><a href="set_transfer.html">set_transfer-method</a></td>
+<td>Set transfer events</td></tr>
+<tr><td style="width: 25%;"><a href="set_window.html">set_window</a></td>
+<td>Set window length</td></tr>
+<tr><td style="width: 25%;"><a href="simulate.html">simulate</a></td>
+<td>Simulate an effect scenario</td></tr>
+<tr><td style="width: 25%;"><a href="simulate.html">simulate-method</a></td>
+<td>Simulate an effect scenario</td></tr>
+<tr><td style="width: 25%;"><a href="simulate_batch.html">simulate_batch</a></td>
+<td>Batch simulation using multiple exposure series</td></tr>
+<tr><td style="width: 25%;"><a href="solver.html">solver</a></td>
+<td>Calls ODE solver for a particular model</td></tr>
+<tr><td style="width: 25%;"><a href="solver.html">solver-method</a></td>
+<td>Calls ODE solver for a particular model</td></tr>
+<tr><td style="width: 25%;"><a href="survival.html">survival</a></td>
+<td>Survival rate</td></tr>
+</table>
+
+<h2><a id="T">-- T --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Transferable.html">Transferable</a></td>
+<td>Biomass transfer class</td></tr>
+<tr><td style="width: 25%;"><a href="Transferable.html">Transferable-class</a></td>
+<td>Biomass transfer class</td></tr>
+</table>
+</div></body></html>

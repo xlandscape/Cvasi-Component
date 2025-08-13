@@ -1,0 +1,95 @@
+Algae-models            Algae models
+Algae_Simple            Algae model with exponential growth but without
+                        additional forcings
+Algae_TKTD              Algae model with exponential growth, forcings
+                        (P, I) and scaled damage
+Algae_Weber             Algae model with exponential growth and
+                        forcings (I, T)
+CalibrationSet          Calibration set
+DEB-models              Dynamic Energy Budget (DEB) models
+DEB_abj                 DEB_abj
+DEBtox                  DEBtox model
+ExposureSeries          Exposure time-series
+GUTS-RED-models         GUTS-RED models
+GUTS_RED_IT             GUTS-RED-IT scenario
+GUTS_RED_SD             GUTS-RED-SD scenario
+Lemna-models            Lemna models
+Lemna_SETAC             Lemna model (Klein et al. 2021)
+Lemna_Schmitt           Lemna model (Schmitt et al. 2013)
+Macrophyte-models       Macrophyte models
+Myrio                   Myriophyllum model with exponential growth
+Myrio_log               Myriophyllum model with logistic growth
+Myriophyllum-models     Myriophyllum models
+Rsubcapitata            An algae scenario
+Scenarios               Effect scenario classes
+Schmitt2013             A Lemna data set with multiple treatment levels
+Transferable            Biomass transfer class
+americamysis            A DEB abj scenario of Americamysis bahia
+batch                   Batch simulation of multiple exposure levels
+cache_controls          Cache control simulations
+calibrate               Fit model parameters to experimental data
+dmagna                  A DEBtox scenario of Daphnia magna
+dose_response           Calculate a dose response curve
+effect                  Effect level
+epx                     Effect profiles (EPx values)
+epx_mtw                 Calculate EPx values for a series of moving
+                        time window
+explore_space           Explore parameter space
+focusd1                 A Lemna_SETAC scenario with variable
+                        environment
+fx                      Generic to calculate effects for a particular
+                        scenario
+get_model               Get model name
+get_tag                 Get scenario tag
+import_morse            Import 'morse' model parameters
+import_swash            SWASH project exposure profile import
+import_toxswa           Import _TOXSWA_ exposure series
+is_DEB                  Test if argument is a DEB model
+is_GUTS                 Test if argument is a GUTS model
+is_Lemna                Test if argument is a Lemna model
+is_LemnaThreshold       Test if argument is a LemnaThreshold model
+is_scenario             Test if argument is an effect scenario
+lik_profile             Likelihood profiling
+log_enable              Start and stop logging
+log_envir               Log R environment properties
+log_lik                 Calculate log likelihood
+log_msg                 Add a log message
+log_scenarios           Log scenario properties
+metsulfuron             Lemna data published by Schmitt (2013)
+minnow_it               A fitted GUTS-RED-IT scenario of the fathead
+                        minnow
+minnow_sd               A fitted GUTS-RED-SD scenario of the fathead
+                        minnow
+no_exposure             Zero exposure
+parameter_set           Set of model parameters
+pll_debug               Disable parallelization for debugging
+plot                    S3 plotting functions
+plot_epx                Plot EPx values
+plot_lik_profile        Plot likelihood profiles or all profiled
+                        parameters
+plot_param_space        Plot likelihood profiles or all profiled
+                        parameters
+plot_ppc                Creates a PPC plot for a single dataset
+plot_ppc_combi          Create PPC plot for one or more datasets
+plot_scenario           Creates a prediction plot for one effect
+                        scenario
+plot_sd                 Creates plot of model results (uncertainties
+                        optional)
+pull_metadata           Pull metadata from scenarios
+sequence                Sequence of scenarios
+set_bounds              Set boundaries of model parameters
+set_endpoints           Set effect endpoints
+set_exposure            Set exposure time-series
+set_forcings            Set time-dependent parameters
+set_init                Set initial state
+set_mode_of_action      Set mode of action
+set_noexposure          Set zero exposure
+set_param               Set model parameters
+set_tag                 Set a tag
+set_times               Set output times
+set_transfer            Set transfer events
+set_window              Set window length
+simulate                Simulate an effect scenario
+simulate_batch          Batch simulation using multiple exposure series
+solver                  Calls ODE solver for a particular model
+survival                Survival rate
